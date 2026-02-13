@@ -1,0 +1,141 @@
+﻿RECID,Participant ID
+demographics,Demographics Data
+SUBTYPE2,"Participant type: Healthy Control (HC), First Episode Schizhophrenia Spectrum Psychosis (FESZ), First Episode Affective Psychosis (FEAFF)"
+SEX,Participant sex 
+AGE,Age of participant in years at scan date
+HAND,Handedness
+SES,"Participant socioeconomic status. Hollingshead index, based on education and occupation (range: 10 to 70, where 70 is better)"
+PSES,"Parents of participant socioeconomic status, calculated as a mean of both parents if both values are available (if only one value, use that). Hollingshead index, based on education and occupation"
+PSYCH2SCAN,Number of days from first clinical contact for psychosis to scan
+MED2SCAN,Length of time in days from first anti-psychotic medication to scan date
+MEDICATION,Clorpromazine equivalent dose
+DUP,Duration of untreated psychosis: number of days from first psychotic symptoms (from retrospective measures) to medication with antypsychotics
+MRI data,MRI Data
+SCANdate,Date of MRI scan
+MEG data,MEG Data
+SCANdate,Date of MEG scan
+WASI,Weschler Abbreviated Scale of Intelligence
+ASMTDATE,Date of Assessment
+VOCAB_RS,WASI Vocabulary subtest Raw Score
+VOCAB_TS,WASI Vocabulary subtest T-score
+MATRIX_RS,WASI Matrix Reasoning subtest Raw Score
+MATRIX_TS,WASI Matrix Reasoning subtest T-score
+FULL2TS,Combined T-score of WASI subtests Matrix Reasoning & Vocabulary
+FULL2IQ,"Full IQ estimate on WASI, using two subtests: Matrix Reasoning & Vocabulary"
+FULL2PCT,"Full IQ estimate on WASI, using two subtests: Matrix Reasoning & Vocabulary, Age and Gender Corrected Percentile"
+MCCB,MATRICS Consensus Cognitive Battery
+ASMTDATE,Date of Assessment
+TMTRAW,Trail Making Test Raw Time in Seconds
+TMTTSCR,Trail Making Test Age and Gender Corrected T-Score
+TMTPCT,Trail Making Test Age and Gender Corrected Percentile
+BACSSCRAW,Brief Assessment of Cognition in Schizophrenia: Symbol Coding Correct Responses
+BACSSCTSCR,Brief Assessment of Cognition in Schizophrenia: Symbol Coding Age and Gender Corrected T-Score
+BACSSCPCT,Brief Assessment of Cognition in Schizophrenia: Symbol Coding Age and Gender Corrected Percentile
+HVLTRRAWT1,"Hopkins Verbal Learning Test - Revised Score, Trial 1"
+HVLTRRAWT2,"Hopkins Verbal Learning Test - Revised Score, Trial 2"
+HVLTRRAWT3,"Hopkins Verbal Learning Test - Revised Score, Trial 3"
+HVLTRRAWSUM,"Hopkins Verbal Learning Test - Revised Score, Trials Sum"
+HVLTRTSCR,"Hopkins Verbal Learning Test - Revised, Age and Gender Corrected T-Score"
+HVLTRPCT,"Hopkins Verbal Learning Test - Revised, Age and Gender Corrected Percentile"
+WMS3SSRAW,Wechsler Memory Scale-III Spatial Span Total Score
+WMS3SSTSCR,Wechsler Memory Scale-III Spatial Span Age and Gender Corrected T-Score
+WMS3SSPCT,Wechsler Memory Scale-III Spatial Span Age and Gender Corrected Percentile
+LNSRAW,Letter-Number Span Total Score
+LNSTSCR,Letter-Number Span Age and Gender Corrected T-Score
+LNSPCT,Letter-Number Span Age and Gender Corrected Percentile
+NABRAW,"Neuropsychological Assessment Battery, Mazes Score"
+NABTSCR,"Neuropsychological Assessment Battery, Mazes Age and Gender Corrected T-Score"
+NABPCT,"Neuropsychological Assessment Battery, Mazes Age and Gender Corrected Percentile"
+BVMTRRAWT1,Brief Visuospatial Memory Test - Revised Trial 1 Score
+BVMTRRAWT2,Brief Visuospatial Memory Test - Revised Trial 2 Score
+BVMTRRAWT3,Brief Visuospatial Memory Test - Revised Trial 3 Score
+BVMTRRAWSUM,Brief Visuospatial Memory Test - Revised Trials Sum Score
+BVMTRTSCR,Brief Visuospatial Memory Test - Revised Age and Gender Corrected T-Score
+BVMTRPCT,Brief Visuospatial Memory Test - Revised Age and Gender Corrected Percentile
+FLUENRAW,Category Fluency: Animal Naming Score
+FLUENTSCR,Category Fluency: Animal Naming Age and Gender Corrected T-Score
+FLUENPCT,Category Fluency: Animal Naming Age and Gender Corrected Percentile
+MSCEITMERAW,Mayer-Salovey-Caruso Emotional Intelligence Test: Managing Emotions Score
+MSCEITMETSCR,Mayer-Salovey-Caruso Emotional Intelligence Test: Managing Emotions Age and Gender Corrected T-Score
+MSCEITMEPCT,Mayer-Salovey-Caruso Emotional Intelligence Test: Managing Emotions Age and Gender Corrected Percentile
+CPTIPRAW2D,Continuous Performance Test-Identical Pairs 2 Digit Score
+CPTIPRAW3D,Continuous Performance Test-Identical Pairs 3 Digit Score
+CPTIPRAW4D,Continuous Performance Test-Identical Pairs 4 Digit Score
+CPTIPRAWMEAN,Continuous Performance Test-Identical Pairs Mean Score
+CPTIPTSCR,Continuous Performance Test-Identical Pairs Age and Gender Corrected T-Score
+CPTIPPCT,Continuous Performance Test-Identical Pairs Age and Gender Corrected Percentile
+SPEEDTSCR,Speed of Processing Age and Gender Corrected T-Score
+SPEEDPCT,Speed of Processing Age and Gender Corrected Percentile
+ATT_VIGTSCR,Attention/Vigilance Age and Gender Corrected T_Score
+ATT_VIGPCT,Attention/Vigilance Age and Gender Corrected Percentile
+WMTSCR,Working Memory Age and Gender Corrected T-Score
+WMPCT,Working Memory Age and Gender Corrected Percentile
+VERBTSCR,Verbal Learning Age and Gender Corrected T-Score
+VERBPCT,Verbal Learning Age and Gender Corrected Percentile
+VISTSCR,Visual Learning Age and Gender Corrected T-Score
+VISPCT,Visual Learning Age and Gender Corrected Percentile
+RPSTSCR,Reasoning and Problem Solving Age and Gender Corrected T-Score
+RPSPCT,Reasoning and Problem Solving Age and Gender Corrected Percentile
+SOCCOGTSCR,Social Cognition Age and Gender Corrected T-Score
+SOCCOGPCT,Social Cognition Age and Gender Corrected Percentile
+OVERALLTSCR,Overall Composite Age and Gender Corrected T-Score
+OVERALLPCT,Overall Composite Age and Gender Corrected Percentile
+PANSS,Positive and Negative Syndrome Scale for Schizophrenia
+interview_date,Date of Assessment
+pos_p1,PANSS - Item P1. Delusion 
+pos_p2,PANSS - Item P2. Conceptual disorganization 
+pos_p3,PANSS - Item P3. Hallucination Behavior 
+pos_p4,PANSS - Item P4. Excitement 
+pos_p5,PANSS - Item P5. Grandiosity 
+pos_p6,PANSS - Item P6. Suspiciousness/Persecution 
+pos_p7,PANSS - Item P7. Hostility 
+neg_n1,PANSS - Item N1. Blunted Affect 
+neg_n2,PANSS - Item N2. Emotional withdrawal 
+neg_n3,PANSS - Item N3. Poor rapport 
+neg_n4,PANSS - Item N4. Passive/ Apathetic social withdrawal 
+neg_n5,PANSS - Item N5. Difficulties in abstract thinking 
+neg_n6,PANSS - Item N6. Lack of Spontaneity/ Flow of conversation 
+neg_n7,PANSS - Item N7. Stereotyped thinking 
+gps_g1,PANSS - Item G1. Somatic Concerns 
+gps_g2,PANSS - Item G2. Anxiety 
+gps_g3,PANSS - Item G3. Guilt feelings 
+gps_g4,PANSS - Item G4. Tension 
+gps_g5,PANSS - Item G5. Mannerisms and posturing 
+gps_g6,PANSS - Item G6. Depression 
+gps_g7,PANSS - Item G7. Motor Retardation 
+gps_g8,PANSS - Item G8. Uncooperativeness 
+gps_g9,PANSS - Item G9. Unusual thought content 
+gps_g10,PANSS - Item G10. Disorientation 
+gps_g11,PANSS - Item G11. Poor attention 
+gps_g12,PANSS - Item G12. Lack of judgment/ insight 
+gps_g13,PANSS - Item G13. Disturbance of volition 
+gps_g14,PANSS - Item G14. Poor impulse control 
+gps_g15,PANSS - Item G15. Preoccupation 
+gps_g16,PANSS - Item G16. Active social avoidance 
+pan_anger,PANSS - Item S1. Anger 
+pan_delaygrat,PANSS - Item S2. Difficulty in delaying gratification 
+pan_afflabil,PANSS - Item S3. Affective liability 
+panss_general,Original PANSS (Positive and Negative Syndrome Scale for Schizophrenia) General Raw Score
+panss_negative,"PANSS Negative (Shafer, 2019)"
+panss_positive,"PANSS Positive (Shafer, 2019)"
+panss_3_comp,Original PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Composite Raw Score
+panss_total,Original PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Total Raw Score
+panss_cluster_ang,PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Anergia Raw Score
+panss_cluster_tht,PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Thought Disturbance Raw Score
+panss_cluster_act,PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Activation Raw Score
+panss_cluster_par,PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Paranoid_Belligerance Raw Score
+panss_cluster_dep,PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Depression Raw Score
+panss_supplementary,PANSS Supplementary score
+PANSS5P_RS,PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Pentagonal Model Positive Raw Score
+PANSS5N_RS,PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Pentagonal Model Negative Raw Score
+PANSS5AC_RS,PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Pentagonal Model Activation Raw Score
+PANSS5DM_RS,PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Pentagonal Model Dysphoric Mood Raw Score
+PANSS5AP_RS,PANSS (Positive and Negative Syndrome Scale for Schizophrenia) Pentagonal Model Autistic Preoccupation Raw Score
+Global_functioning,Global Assessment of Functioning Scale
+interview_date,Date of Assessment
+gf_role_scole,"GAF Role functioning, current (at time of visit). "
+gf_role_low,"GAF Role functioning, lowest lifetime value"
+gf_role_high,"GAF Role functioning, highest lifetime value"
+gf_social_scale,"GAF Social functioning, current (at time of visit)"
+gf_social_low,"GAF Social functioning, lowest lifetime value"
+gf_social_high,"GAF Social functioning, highest lifetime value"

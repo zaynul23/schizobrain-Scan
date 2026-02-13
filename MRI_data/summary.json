@@ -1,8 +1,10 @@
 {
-    "total subs": 71,
+    "total subs": 97,
     "sources": {
         "open neuro ":{
-            "https://openneuro.org/datasets/ds004302/versions/1.0.1": 71
+            "https://openneuro.org/datasets/ds004302/versions/1.0.1": 71,
+            "https://openneuro.org/datasets/ds004837/versions/1.0.2": 26,
+            "https://openneuro.org/datasets/ds005073/versions/1.0.0": "16 maybe"
         }
     }
 }
