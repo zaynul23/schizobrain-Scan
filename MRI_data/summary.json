@@ -5,7 +5,8 @@
             "https://openneuro.org/datasets/ds004302/versions/1.0.1": 71,
             "https://openneuro.org/datasets/ds004837/versions/1.0.2": 26,
             "https://openneuro.org/datasets/ds005073/versions/1.0.0": "16 maybe",
-            "https://openneuro.org/datasets/ds000115/versions/00001": 99
+            "https://openneuro.org/datasets/ds000115/versions/00001": 99,
+            "https://www.kaggle.com/datasets/haithem1999/hippocampus-annotated-dataset": 56
         }
     }
 }
