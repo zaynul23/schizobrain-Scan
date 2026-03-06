@@ -1,15 +1,17 @@
 {
-    "total subs":{"schiz":190,"healthy":191,"first_ep_affective_psychosis":8,"schiz_sibling":35,"healthy_sibling":21,"bipolar":49,"adhd":43},
+    "total subs":{"schiz":329,"healthy":327,"first_ep_affective_psychosis":8,"schiz_sibling":35,"healthy_sibling":21,"bipolar":49,"adhd":43},
     "sources": {
         "open neuro ":{
             "https://openneuro.org/datasets/ds004302/versions/1.0.1":  {"schiz":71},
-            "https://openneuro.org/datasets/ds004837/versions/1.0.2":  {"healthy": 26,"first_episode_schizophrenia": 26,"first_episode_affective_psychosis": 8},
+            "https://openneuro.org/datasets/ds004837/versions/1.0.2":  {"healthy": 26,"schiz": 26,"first_episode_affective_psychosis": 8},
             "https://openneuro.org/datasets/ds005073/versions/1.0.0": {"schiz": 16, "healthy": 15},
             "https://openneuro.org/datasets/ds000115/versions/00001":  {"schiz": 23, "healthy": 20, "schiz_sibling": 35, "healthy_sib": 21},
             "https://openneuro.org/datasets/ds000030/versions/1.0.0":  {"healthy": 130, "schiz": 50, "bipolar": 49, "adhd": 43},
             "https://openneuro.org/datasets/ds003011/versions/1.2.3":  {"schiz": 4}
         },"kaggle ":{
             "https://www.kaggle.com/datasets/haithem1999/hippocampus-annotated-dataset": 56
+        },"NITRC ":{
+            "https://www.nitrc.org/ir/app/action/DisplayItemAction/search_element/xnat%3AprojectData/search_field/xnat%3AprojectData.ID/search_value/NUDataSharing": {"schiz":139, "healthy": 136}
         }
     }
 }
