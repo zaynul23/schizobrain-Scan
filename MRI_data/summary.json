@@ -8,10 +8,11 @@
             "https://openneuro.org/datasets/ds000115/versions/00001":  {"schiz": 23, "healthy": 20, "schiz_sibling": 35, "healthy_sib": 21},
             "https://openneuro.org/datasets/ds000030/versions/1.0.0":  {"healthy": 130, "schiz": 50, "bipolar": 49, "adhd": 43},
             "https://openneuro.org/datasets/ds003011/versions/1.2.3":  {"schiz": 4}
+            },
+        "NITRC ":{
+                "https://www.nitrc.org/ir/app/action/DisplayItemAction/search_element/xnat%3AprojectData/search_field/xnat%3AprojectData.ID/search_value/NUDataSharing": {"schiz":139, "healthy": 136}
         },"kaggle ":{
-            "https://www.kaggle.com/datasets/haithem1999/hippocampus-annotated-dataset": 56
-        },"NITRC ":{
-            "https://www.nitrc.org/ir/app/action/DisplayItemAction/search_element/xnat%3AprojectData/search_field/xnat%3AprojectData.ID/search_value/NUDataSharing": {"schiz":139, "healthy": 136}
+                "https://www.kaggle.com/datasets/haithem1999/hippocampus-annotated-dataset": "56 but unusable"
         }
     }
 }
