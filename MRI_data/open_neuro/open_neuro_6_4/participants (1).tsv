@@ -1,0 +1,5 @@
+participant_id	has_Y1CMH	has_Y1MRC	has_Y1ZHH	has_Y2CMH	has_Y2MRC	has_Y2ZHH	has_Y3CMH	has_Y3MRP	has_Y3ZHP	has_Y4CMP	qc_comments
+sub-01	Y	Y	Y	Y	Y	Y	N	N	N	N	n/a
+sub-02	N	N	N	N	N	N	Y	Y	Y	Y	n/a
+sub-03	Y	Y	Y	Y	Y	Y	Y	Y	Y	Y	n/a
+sub-04	Y	Y	Y	Y	Y	Y	Y	Y	Y	Y	dwi acquired with fewer slices in dim3
