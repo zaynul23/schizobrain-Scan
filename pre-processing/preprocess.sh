@@ -77,12 +77,21 @@
 # Tool: FAST (FSL)
 # -------------------------------------------------------
 
-# Input preprocessed MRI
-INPUT="/mnt/c/Users/sucha/OneDrive/Documents/schizobrain-Scan/MRI_data/open_neuro/open_neuro_4_99/sub-01_T1w/brain_intensity_normalized_mni.nii.gz"
+# # Input preprocessed MRI
+# INPUT="/mnt/c/Users/sucha/OneDrive/Documents/schizobrain-Scan/MRI_data/open_neuro/open_neuro_4_99/sub-01_T1w/brain_intensity_normalized_mni.nii.gz"
 
-# Run FAST segmentation
-fast "$INPUT"
+# # Run FAST segmentation
+# fast "$INPUT"
 
-echo "Segmentation complete."
-echo "Gray Matter Map:"
-echo "brain_intensity_normalized_mni_pve_1.nii.gz"
+# echo "Segmentation complete."
+# echo "Gray Matter Map:"
+# echo "brain_intensity_normalized_mni_pve_1.nii.gz"
+
+
+
+
+
+
+
+#!/bin/bash
+python preprocess.py
