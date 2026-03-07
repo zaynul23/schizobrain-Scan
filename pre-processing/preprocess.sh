@@ -311,19 +311,20 @@
 #!/bin/bash
 set -e
 
-BASE_DIR="/mnt/c/Users/sucha/OneDrive/Documents/schizobrain-Scan/MRI_data/open_neuro/open_neuro_4_99_2"
+# BASE_DIR="/mnt/c/Users/sucha/OneDrive/Documents/schizobrain-Scan/MRI_data/open_neuro/open_neuro_4_99_2"
+BASE_DIR="/mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/open_neuro/open_neuro_1_71/scans"
 
 echo "Starting MRI preprocessing..."
 
-for INPUT in "$BASE_DIR"/sub-*_T1w.nii; do
+for INPUT in "$BASE_DIR"/sub-*_T1w.nii.gz; do
 
 echo "Processing: $INPUT"
 
 # Extract filename without extension
 
-BASENAME=$(basename "$INPUT" .nii)
+BASENAME=$(basename "$INPUT" .nii.gz)
 
-OUTPUT_DIR="$BASE_DIR"
+OUTPUT_DIR="/mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/open_neuro/open_neuro_1_71/preprocessed"
 
 REORIENT="$OUTPUT_DIR/reoriented.nii.gz"
 BIAS="$OUTPUT_DIR/bias_corrected.nii.gz"
@@ -348,8 +349,8 @@ bet "$BIAS" "$BRAIN"
 
 # 4 Registration to MNI
 
-flirt -in "$BRAIN" 
--ref $FSLDIR/data/standard/MNI152_T1_1mm_brain.nii.gz 
+flirt -in "$BRAIN" \
+-ref "$FSLDIR/data/standard/MNI152_T1_1mm_brain.nii.gz" \
 -out "$MNI"
 
 # 5 Intensity normalization
