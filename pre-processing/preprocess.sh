@@ -94,4 +94,9 @@
 
 
 #!/bin/bash
+
+echo "Starting preprocessing..."
+
 python preprocess.py
+
+echo "Done"
