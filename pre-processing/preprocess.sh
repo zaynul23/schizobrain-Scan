@@ -218,6 +218,96 @@
 
 
 
+# #!/bin/bash
+# set -e
+
+# BASE_DIR="/mnt/c/Users/sucha/OneDrive/Documents/schizobrain-Scan/MRI_data/open_neuro/open_neuro_4_99_2"
+
+# echo "Starting MRI preprocessing..."
+
+# for INPUT in "$BASE_DIR"/sub-*_T1w.nii; do
+
+# echo "Processing: $INPUT"
+
+# OUTPUT_DIR="$BASE_DIR"
+
+# REORIENT="$OUTPUT_DIR/reoriented.nii.gz"
+# BIAS="$OUTPUT_DIR/bias_corrected.nii.gz"
+# BRAIN="$OUTPUT_DIR/brain.nii.gz"
+# MNI="$OUTPUT_DIR/brain_mni.nii.gz"
+# NORM="$OUTPUT_DIR/brain_normalized.nii.gz"
+
+# # 1 Reorientation
+
+# echo "Reorienting..."
+# fslreorient2std "$INPUT" "$REORIENT"
+
+# # 2 Bias field correction
+
+# echo "Bias correction..."
+# fast -B "$REORIENT"
+# mv "$OUTPUT_DIR/reoriented_restore.nii.gz" "$BIAS"
+
+# # 3 Skull stripping
+
+# echo "Skull stripping..."
+# bet "$BIAS" "$BRAIN"
+
+# # 4 Registration to MNI
+
+# echo "Registering to MNI..."
+# flirt -in "$BRAIN" 
+# -ref $FSLDIR/data/standard/MNI152_T1_1mm_brain.nii.gz 
+# -out "$MNI"
+
+# # 5 Intensity normalization
+
+# echo "Intensity normalization..."
+# MEAN=$(fslstats "$MNI" -M)
+# fslmaths "$MNI" -div $MEAN "$NORM"
+
+# # 6 GM segmentation (on preprocessed image)
+
+# echo "Generating GM map..."
+# fast "$NORM"
+
+# # Remove unnecessary FAST outputs
+
+# rm -f "$OUTPUT_DIR"/brain_normalized_pve_0.nii.gz
+# rm -f "$OUTPUT_DIR"/brain_normalized_pve_2.nii.gz
+# rm -f "$OUTPUT_DIR"/brain_normalized_seg.nii.gz
+# rm -f "$OUTPUT_DIR"/brain_normalized_mixeltype.nii.gz
+# rm -f "$OUTPUT_DIR"/brain_normalized_pveseg.nii.gz
+
+# # Remove intermediate preprocessing files
+
+# rm -f "$REORIENT"
+# rm -f "$BIAS"
+# rm -f "$BRAIN"
+# rm -f "$MNI"
+
+# echo "Finished processing: $INPUT"
+
+# done
+
+# echo "All preprocessing completed."
+# echo "Final outputs:"
+# echo "brain_normalized.nii.gz"
+# echo "brain_normalized_pve_1.nii.gz"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #!/bin/bash
 set -e
 
@@ -229,55 +319,59 @@ for INPUT in "$BASE_DIR"/sub-*_T1w.nii; do
 
 echo "Processing: $INPUT"
 
+# Extract filename without extension
+
+BASENAME=$(basename "$INPUT" .nii)
+
 OUTPUT_DIR="$BASE_DIR"
 
 REORIENT="$OUTPUT_DIR/reoriented.nii.gz"
 BIAS="$OUTPUT_DIR/bias_corrected.nii.gz"
 BRAIN="$OUTPUT_DIR/brain.nii.gz"
 MNI="$OUTPUT_DIR/brain_mni.nii.gz"
-NORM="$OUTPUT_DIR/brain_normalized.nii.gz"
+
+FINAL_IMG="$OUTPUT_DIR/${BASENAME}_preprocessed.nii.gz"
+GM_MAP="$OUTPUT_DIR/${BASENAME}_gm.nii.gz"
 
 # 1 Reorientation
 
-echo "Reorienting..."
 fslreorient2std "$INPUT" "$REORIENT"
 
 # 2 Bias field correction
 
-echo "Bias correction..."
 fast -B "$REORIENT"
 mv "$OUTPUT_DIR/reoriented_restore.nii.gz" "$BIAS"
 
 # 3 Skull stripping
 
-echo "Skull stripping..."
 bet "$BIAS" "$BRAIN"
 
 # 4 Registration to MNI
 
-echo "Registering to MNI..."
 flirt -in "$BRAIN" 
 -ref $FSLDIR/data/standard/MNI152_T1_1mm_brain.nii.gz 
 -out "$MNI"
 
 # 5 Intensity normalization
 
-echo "Intensity normalization..."
 MEAN=$(fslstats "$MNI" -M)
-fslmaths "$MNI" -div $MEAN "$NORM"
+fslmaths "$MNI" -div $MEAN "$FINAL_IMG"
 
-# 6 GM segmentation (on preprocessed image)
+# 6 GM segmentation
 
-echo "Generating GM map..."
-fast "$NORM"
+fast "$FINAL_IMG"
+
+# Rename GM map
+
+mv "${FINAL_IMG%.nii.gz}_pve_1.nii.gz" "$GM_MAP"
 
 # Remove unnecessary FAST outputs
 
-rm -f "$OUTPUT_DIR"/brain_normalized_pve_0.nii.gz
-rm -f "$OUTPUT_DIR"/brain_normalized_pve_2.nii.gz
-rm -f "$OUTPUT_DIR"/brain_normalized_seg.nii.gz
-rm -f "$OUTPUT_DIR"/brain_normalized_mixeltype.nii.gz
-rm -f "$OUTPUT_DIR"/brain_normalized_pveseg.nii.gz
+rm -f "${FINAL_IMG%.nii.gz}_pve_0.nii.gz"
+rm -f "${FINAL_IMG%.nii.gz}_pve_2.nii.gz"
+rm -f "${FINAL_IMG%.nii.gz}_seg.nii.gz"
+rm -f "${FINAL_IMG%.nii.gz}_mixeltype.nii.gz"
+rm -f "${FINAL_IMG%.nii.gz}_pveseg.nii.gz"
 
 # Remove intermediate preprocessing files
 
@@ -291,6 +385,3 @@ echo "Finished processing: $INPUT"
 done
 
 echo "All preprocessing completed."
-echo "Final outputs:"
-echo "brain_normalized.nii.gz"
-echo "brain_normalized_pve_1.nii.gz"
