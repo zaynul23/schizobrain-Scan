@@ -1,0 +1,366 @@
+"""
+MRI Scan Similarity Comparator
+================================
+Compares two raw (non-skull-stripped) MRI scans to determine if they are
+the same underlying brain scan, even if one has been re-oriented, resliced,
+or slightly preprocessed differently.
+
+Design principles (no skull stripping):
+  - Fully deterministic: same inputs always produce the same score
+  - Self-similarity guaranteed: feeding the same path twice always returns 1.0
+  - Skull-robust: metrics are computed only on a conservative intensity mask
+    (brain+skull tissue) which is stable and requires no ML model
+  - Re-orientation robust: rigid registration aligns the volumes before the
+    main metrics are computed, so axis flips / rotations don't fool the scorer
+
+Pipeline:
+  1. Load both volumes as float32
+  2. Resample volume B onto volume A's voxel grid (handles different matrix sizes)
+  3. Rigid registration (SimpleITK) — aligns B to A to handle re-orientation
+  4. Compute 4 deterministic metrics on registered volumes:
+       a. Normalized Cross-Correlation (NCC)
+       b. Normalized Mutual Information (NMI)
+       c. Structural Similarity (SSIM) on 3 central slices
+       d. Histogram correlation
+  5. Weighted composite score → SAME / DIFFERENT verdict
+
+Requirements:
+    pip install nibabel numpy scipy scikit-image SimpleITK
+"""
+
+import os
+import sys
+import numpy as np
+import nibabel as nib
+from scipy.stats import pearsonr
+from skimage.metrics import structural_similarity as ssim_fn
+from skimage.exposure import rescale_intensity
+import warnings
+warnings.filterwarnings("ignore")
+
+
+# ── loading & preprocessing ───────────────────────────────────────────────────
+
+def load_volume(path: str) -> np.ndarray:
+    """
+    Load a NIfTI file and return a 3D float32 numpy array.
+    Squeezes trailing size-1 dimensions (e.g. shape (128,256,256,1) -> (128,256,256))
+    so all downstream code works with a pure 3D volume.
+    """
+    img  = nib.load(path)
+    data = np.asarray(img.dataobj, dtype=np.float32)
+    # Drop any trailing dimensions of size 1
+    while data.ndim > 3 and data.shape[-1] == 1:
+        data = data[..., 0]
+    if data.ndim != 3:
+        raise ValueError(
+            f"Expected 3D volume after squeezing, got shape {data.shape}. "
+            "If this is a 4D timeseries, select a single volume first."
+        )
+    return data
+
+
+def normalize(vol: np.ndarray) -> np.ndarray:
+    """
+    Normalize to [0, 1] using the 1st and 99th percentile of nonzero voxels.
+    Using percentiles (not min/max) makes normalization robust to outlier
+    voxels that differ between scanner acquisitions of the same brain.
+    """
+    nz = vol[vol > 0]
+    if nz.size == 0:
+        return np.zeros_like(vol)
+    p1, p99 = np.percentile(nz, 1), np.percentile(nz, 99)
+    if p99 == p1:
+        return np.zeros_like(vol)
+    out = (vol - p1) / (p99 - p1)
+    return np.clip(out, 0.0, 1.0).astype(np.float32)
+
+
+def resize_to_match(ref: np.ndarray, mov: np.ndarray) -> np.ndarray:
+    """
+    Resample `mov` to match `ref` shape using trilinear interpolation.
+    Required when two scans have different matrix dimensions.
+    """
+    if ref.shape[:3] == mov.shape[:3]:
+        return mov
+    from scipy.ndimage import zoom
+    factors = tuple(r / m for r, m in zip(ref.shape[:3], mov.shape[:3]))
+    zoomed  = zoom(mov, factors, order=1)
+    # Crop / zero-pad to exactly match (handles floating point rounding)
+    out  = np.zeros(ref.shape[:3], dtype=np.float32)
+    crop = tuple(slice(0, min(a, b)) for a, b in zip(ref.shape[:3], zoomed.shape[:3]))
+    out[crop] = zoomed[crop]
+    return out
+
+
+def tissue_mask(vol: np.ndarray) -> np.ndarray:
+    """
+    Conservative intensity threshold mask that captures brain + skull tissue
+    while excluding air/background. Uses Otsu-like two-class split on nonzero
+    voxels — fully deterministic, no ML required.
+    Skull is included intentionally: it is the same skull across two copies of
+    the same scan, and excluding it via non-deterministic stripping caused more
+    problems than it solved.
+    """
+    nz = vol[vol > 0]
+    if nz.size == 0:
+        return vol > 0
+    # Simple mid-point threshold between background and tissue peak
+    thresh = np.percentile(nz, 10)
+    return vol > thresh
+
+
+# ── rigid registration ────────────────────────────────────────────────────────
+
+def register(fixed_arr: np.ndarray, moving_arr: np.ndarray) -> np.ndarray:
+    """
+    Rigidly register `moving_arr` onto `fixed_arr` using SimpleITK.
+    All operations are in memory (numpy arrays in, numpy array out).
+    Uses REGULAR (not RANDOM) sampling so the result is fully deterministic.
+    Returns the resampled moving volume aligned to fixed space.
+    """
+    import SimpleITK as sitk
+
+    fixed  = sitk.GetImageFromArray(fixed_arr)
+    moving = sitk.GetImageFromArray(moving_arr)
+
+    reg = sitk.ImageRegistrationMethod()
+    reg.SetMetricAsMattesMutualInformation(numberOfHistogramBins=50)
+    # REGULAR sampling = deterministic (RANDOM sampling was the source of
+    # score variability in the previous version)
+    reg.SetMetricSamplingStrategy(reg.REGULAR)
+    reg.SetMetricSamplingPercentage(0.2)
+    reg.SetInterpolator(sitk.sitkLinear)
+    reg.SetOptimizerAsGradientDescent(
+        learningRate=1.0,
+        numberOfIterations=150,
+        convergenceMinimumValue=1e-7,
+        convergenceWindowSize=10,
+    )
+    reg.SetOptimizerScalesFromPhysicalShift()
+
+    # Geometry-based initialisation: centres the volumes before optimising
+    tx = sitk.CenteredTransformInitializer(
+        fixed, moving,
+        sitk.Euler3DTransform(),
+        sitk.CenteredTransformInitializerFilter.GEOMETRY,
+    )
+    reg.SetInitialTransform(tx, inPlace=False)
+
+    # Multi-resolution pyramid for robustness
+    reg.SetShrinkFactorsPerLevel([4, 2, 1])
+    reg.SetSmoothingSigmasPerLevel([2, 1, 0])
+    reg.SmoothingSigmasAreSpecifiedInPhysicalUnitsOn()
+
+    final_tx  = reg.Execute(fixed, moving)
+    resampled = sitk.Resample(
+        moving, fixed, final_tx,
+        sitk.sitkLinear, 0.0, moving.GetPixelID()
+    )
+    return sitk.GetArrayFromImage(resampled).astype(np.float32)
+
+
+# ── similarity metrics ────────────────────────────────────────────────────────
+
+def metric_ncc(a: np.ndarray, b: np.ndarray) -> float:
+    """
+    Normalized Cross-Correlation over tissue voxels.
+    Returns 1.0 for identical arrays, ~0 for unrelated volumes.
+    """
+    mask = tissue_mask(a) | tissue_mask(b)
+    if mask.sum() == 0:
+        return 0.0
+    fa = a[mask].astype(np.float64)
+    fb = b[mask].astype(np.float64)
+    fa -= fa.mean()
+    fb -= fb.mean()
+    denom = np.sqrt((fa ** 2).sum() * (fb ** 2).sum())
+    if denom == 0:
+        return 1.0  # both flat → identical by definition
+    return float(np.clip(np.dot(fa, fb) / denom, -1.0, 1.0))
+
+
+def metric_nmi(a: np.ndarray, b: np.ndarray, bins: int = 64) -> float:
+    """
+    Normalized Mutual Information over tissue voxels.
+    Robust to linear intensity rescaling between scanners.
+    Returns values in [0, 1]; higher = more similar.
+    """
+    mask = tissue_mask(a) | tissue_mask(b)
+    fa   = a[mask].ravel()
+    fb   = b[mask].ravel()
+
+    hist_2d, _, _ = np.histogram2d(fa, fb, bins=bins, range=[[0, 1], [0, 1]])
+    pxy   = hist_2d / (hist_2d.sum() + 1e-12)
+    px    = pxy.sum(axis=1)
+    py    = pxy.sum(axis=0)
+    px_py = px[:, None] * py[None, :]
+    nz    = pxy > 0
+    mi    = (pxy[nz] * np.log(pxy[nz] / (px_py[nz] + 1e-12))).sum()
+    hx    = -(px[px > 0] * np.log(px[px > 0])).sum()
+    hy    = -(py[py > 0] * np.log(py[py > 0])).sum()
+    if hx + hy == 0:
+        return 1.0
+    return float(np.clip(2 * mi / (hx + hy), 0.0, 1.0))
+
+
+def metric_ssim(a: np.ndarray, b: np.ndarray) -> float:
+    """
+    Mean SSIM across the three central orthogonal slices.
+    Captures structural / textural similarity.
+    """
+    cx, cy, cz = [s // 2 for s in a.shape[:3]]
+    slices = [
+        (a[:, :, cz], b[:, :, cz]),  # axial
+        (a[:, cy, :], b[:, cy, :]),  # coronal
+        (a[cx, :, :], b[cx, :, :]),  # sagittal
+    ]
+    scores = []
+    for sa, sb in slices:
+        sa8 = rescale_intensity(sa, out_range=(0, 255)).astype(np.uint8)
+        sb8 = rescale_intensity(sb, out_range=(0, 255)).astype(np.uint8)
+        # win_size must be odd and <= smallest image dimension
+        min_dim  = min(sa8.shape)
+        win_size = min(7, min_dim if min_dim % 2 == 1 else min_dim - 1)
+        scores.append(ssim_fn(sa8, sb8, data_range=255, win_size=win_size))
+    return float(np.mean(scores))
+
+
+def metric_hist(a: np.ndarray, b: np.ndarray, bins: int = 256) -> float:
+    """
+    Pearson correlation of intensity histograms over tissue voxels.
+    Same brain → same tissue distribution → correlation near 1.0.
+    """
+    mask = tissue_mask(a) | tissue_mask(b)
+    ha, _ = np.histogram(a[mask], bins=bins, range=(0, 1))
+    hb, _ = np.histogram(b[mask], bins=bins, range=(0, 1))
+    r, _  = pearsonr(ha.astype(np.float64), hb.astype(np.float64))
+    return float(np.clip(r, 0.0, 1.0))
+
+
+# ── composite scoring ─────────────────────────────────────────────────────────
+
+WEIGHTS = {
+    "ncc":  0.35,
+    "nmi":  0.35,
+    "ssim": 0.20,
+    "hist": 0.10,
+}
+
+
+def composite(scores: dict) -> float:
+    total_w = weighted = 0.0
+    for k, w in WEIGHTS.items():
+        if k in scores:
+            weighted += w * max(0.0, scores[k])
+            total_w  += w
+    return (weighted / total_w) if total_w > 0 else 0.0
+
+
+# ── main comparison ───────────────────────────────────────────────────────────
+
+def compare(path1: str, path2: str, threshold: float = 0.85) -> None:
+    same_file = os.path.abspath(path1) == os.path.abspath(path2)
+
+    print(f"\n{'='*62}")
+    print("  MRI SIMILARITY COMPARISON")
+    print(f"{'='*62}")
+    print(f"  Scan A : {path1}")
+    print(f"  Scan B : {path2}")
+
+    # ── self-comparison short-circuit ─────────────────────────────────────
+    if same_file:
+        print("\n  Same file detected — skipping computation.")
+        _print_scores({"ncc": 1.0, "nmi": 1.0, "ssim": 1.0, "hist": 1.0},
+                      1.0, "SAME SCAN", threshold)
+        return
+
+    # ── load ──────────────────────────────────────────────────────────────
+    print("\n  Loading volumes...")
+    vol_a = normalize(load_volume(path1))
+    vol_b = normalize(load_volume(path2))
+    print(f"  Scan A shape : {vol_a.shape}")
+    print(f"  Scan B shape : {vol_b.shape}")
+
+    # ── resample B to A's grid ────────────────────────────────────────────
+    vol_b = resize_to_match(vol_a, vol_b)
+
+    # ── rigid registration ────────────────────────────────────────────────
+    print("  Registering B onto A (deterministic rigid alignment)...")
+    try:
+        vol_b_reg = register(vol_a, vol_b)
+    except Exception as e:
+        print(f"  WARNING: Registration failed ({e}), comparing unregistered volumes.")
+        vol_b_reg = vol_b
+
+    # ── metrics ───────────────────────────────────────────────────────────
+    print("  Computing metrics...")
+    scores = {
+        "ncc":  metric_ncc(vol_a, vol_b_reg),
+        "nmi":  metric_nmi(vol_a, vol_b_reg),
+        "ssim": metric_ssim(vol_a, vol_b_reg),
+        "hist": metric_hist(vol_a, vol_b_reg),
+    }
+
+    score   = composite(scores)
+    verdict = "SAME SCAN" if score >= threshold else "DIFFERENT SCAN"
+    _print_scores(scores, score, verdict, threshold)
+
+
+def _print_scores(scores, score, verdict, threshold):
+    labels = {
+        "ncc":  "Normalized Cross-Correlation",
+        "nmi":  "Normalized Mutual Information",
+        "ssim": "Structural Similarity (SSIM)",
+        "hist": "Histogram Correlation",
+    }
+    print(f"\n  {'Metric':<32} {'Score':>7}  Bar")
+    print(f"  {'-'*58}")
+    for k, label in labels.items():
+        if k in scores:
+            v   = scores[k]
+            bar = "█" * int(v * 20) + "░" * (20 - int(v * 20))
+            print(f"  {label:<32} {v:>7.4f}  [{bar}]")
+    print(f"  {'-'*58}")
+    print(f"  Composite Score : {score:.4f}  (threshold = {threshold})")
+    print(f"  VERDICT         : {verdict}")
+    print(f"{'='*62}\n")
+
+    if verdict == "SAME SCAN":
+        print("  These scans appear to be the same brain scan.")
+        if score < 1.0:
+            print("  Score < 1.0 is expected when scans differ by re-orientation")
+            print("  or minor preprocessing — registration corrects for this.")
+    else:
+        print("  These scans appear to be from different subjects.")
+        if score > threshold * 0.85:
+            print("  Note: borderline score — inspect manually if uncertain.")
+    print()
+
+
+# ── entry point ───────────────────────────────────────────────────────────────
+
+def main():
+    # ── Set your file paths here ──────────────────────────────────────────
+    SCAN2     = r"D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\MRI_data\NITRC\NUSDAST\scans\NIFTI\CC0239_3.nii.gz"
+    
+    SCAN1     = r"D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\MRI_data\NITRC\NUSDAST\scans\NIFTI\CC0197_1.nii.gz"
+    SCAN2     = r"D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\MRI_data\NITRC\NUSDAST\scans\NIFTI\CC0197_1.nii.gz"
+    
+    SCAN1     = r"D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\MRI_data\NITRC\NUSDAST\scans\NIFTI\CC0202_1.nii.gz"
+    SCAN2     = r"D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\MRI_data\NITRC\NUSDAST\scans\test\CC0202_1_aug.nii.gz"
+    
+    # SCAN2     = "/path/to/second_scan.nii.gz"
+    THRESHOLD = 0.85
+    # ─────────────────────────────────────────────────────────────────────
+
+    for path in (SCAN1, SCAN2):
+        if not os.path.isfile(path):
+            print(f"ERROR: File not found: {path}")
+            sys.exit(1)
+
+    compare(SCAN1, SCAN2, threshold=THRESHOLD)
+
+
+if __name__ == "__main__":
+    main()

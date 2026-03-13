@@ -1,0 +1,10 @@
+{
+    "schiz":1,
+    "healthy":3,
+    "control_sib":6,
+    "bipolar":4,
+
+    "format":"filename_<grpname>_<DS_CODE>"
+
+}
+
