@@ -3,7 +3,7 @@
     "healthy":3,
     "control_sib":6,
     "bipolar":4,
-    "ADHD":2
+    "ADHD":2,
 
     "format":"filename_<grpname>_<DS_CODE>"
 
