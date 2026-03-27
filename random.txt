@@ -1,0 +1,448 @@
+ [OK] A00022687 -> A00022687_T1_3_7.nii.gz
+  [OK] A00023095 -> A00023095_T1_3_7.nii.gz
+  [OK] A00023337 -> A00023337_T1_3_7.nii.gz
+  [OK] A00011265 -> A00011265_T1_3_7.nii.gz
+  [OK] A00021085 -> A00021085_T1_3_7.nii.gz
+  [OK] A00023866 -> A00023866_T1_3_7.nii.gz
+  [OK] A00024160 -> A00024160_T1_3_7.nii.gz
+  [OK] A00024372 -> A00024372_T1_3_7.nii.gz
+  [OK] A00024546 -> A00024546_T1_3_7.nii.gz
+  [OK] A00022490 -> A00022490_T1_3_7.nii.gz
+  [OK] A00013816 -> A00013816_T1_3_7.nii.gz
+  [OK] A00021081 -> A00021081_T1_3_7.nii.gz
+  [OK] A00024301 -> A00024301_T1_3_7.nii.gz
+  [SKIP] A00024932 (datauri=260088): folder not on disk.
+  [OK] A00021145 -> A00021145_T1_3_7.nii.gz
+  [OK] A00022400 -> A00022400_T1_3_7.nii.gz
+  [OK] A00022837 -> A00022837_T1_3_7.nii.gz
+  [OK] A00024535 -> A00024535_T1_3_7.nii.gz
+  [SKIP] A00025969 (datauri=262473): folder not on disk.
+  [OK] A00023143 -> A00023143_T1_3_7.nii.gz
+  [SKIP] A00014898 (datauri=259437): folder not on disk.
+  [OK] A00015826 -> A00015826_T1_3_7.nii.gz
+  [OK] A00020805 -> A00020805_T1_3_7.nii.gz
+  [OK] A00022509 -> A00022509_T1_3_7.nii.gz
+  [OK] A00022835 -> A00022835_T1_3_7.nii.gz
+  [OK] A00020968 -> A00020968_T1_3_7.nii.gz
+  [OK] A00023330 -> A00023330_T1_3_7.nii.gz
+  [OK] A00022653 -> A00022653_T1_3_7.nii.gz
+  [SKIP] A00028406 (datauri=1324946): folder not on disk.
+  [OK] A00018716 -> A00018716_T1_3_7.nii.gz
+  [OK] A00020984 -> A00020984_T1_3_7.nii.gz
+  [SKIP] A00028409 (datauri=1249906): folder not on disk.
+  [SKIP] A00014839 (datauri=262229): folder not on disk.
+  [OK] A00018716 -> A00018716_T1_3_7.nii.gz
+  [OK] A00020984 -> A00020984_T1_3_7.nii.gz
+  [SKIP] A00028409 (datauri=1249906): folder not on disk.
+  [SKIP] A00014839 (datauri=262229): folder not on disk.
+  [OK] A00003150 -> A00003150_T1_3_7.nii.gz
+  [OK] A00018553 -> A00018553_T1_3_7.nii.gz
+  [SKIP] A00027787 (datauri=1108514): folder not on disk.
+  [SKIP] A00028052 (datauri=1153866): folder not on disk.
+  [OK] A00024820 -> A00024820_T1_3_7.nii.gz
+  [OK] A00022810 -> A00022810_T1_3_7.nii.gz
+  [OK] A00002198 -> A00002198_T1_3_7.nii.gz
+  [SKIP] A00009946 (datauri=1099894): folder not on disk.
+  [OK] A00013140 -> A00013140_T1_3_7.nii.gz
+  [OK] A00000300 -> A00000300_T1_3_7.nii.gz
+  [SKIP] A00023131 (datauri=1138501): folder not on disk.
+  [OK] A00003150 -> A00003150_T1_3_7.nii.gz
+  [OK] A00018553 -> A00018553_T1_3_7.nii.gz
+  [SKIP] A00027787 (datauri=1108514): folder not on disk.
+  [SKIP] A00028052 (datauri=1153866): folder not on disk.
+  [OK] A00024820 -> A00024820_T1_3_7.nii.gz
+  [OK] A00022810 -> A00022810_T1_3_7.nii.gz
+  [OK] A00002198 -> A00002198_T1_3_7.nii.gz
+  [SKIP] A00009946 (datauri=1099894): folder not on disk.
+  [OK] A00013140 -> A00013140_T1_3_7.nii.gz
+  [OK] A00000300 -> A00000300_T1_3_7.nii.gz
+  [SKIP] A00023131 (datauri=1138501): folder not on disk.
+  [SKIP] A00029226 (datauri=1484626): folder not on disk.
+  [SKIP] A00031764 (datauri=1611066): folder not on disk.
+  [OK] A00021058 -> A00021058_T1_3_7.nii.gz
+  [OK] A00024820 -> A00024820_T1_3_7.nii.gz
+  [OK] A00022810 -> A00022810_T1_3_7.nii.gz
+  [OK] A00002198 -> A00002198_T1_3_7.nii.gz
+  [SKIP] A00009946 (datauri=1099894): folder not on disk.
+  [OK] A00013140 -> A00013140_T1_3_7.nii.gz
+  [OK] A00000300 -> A00000300_T1_3_7.nii.gz
+  [SKIP] A00023131 (datauri=1138501): folder not on disk.
+  [SKIP] A00029226 (datauri=1484626): folder not on disk.
+  [SKIP] A00031764 (datauri=1611066): folder not on disk.
+  [OK] A00021058 -> A00021058_T1_3_7.nii.gz
+  [SKIP] A00009946 (datauri=1099894): folder not on disk.
+  [OK] A00013140 -> A00013140_T1_3_7.nii.gz
+  [OK] A00000300 -> A00000300_T1_3_7.nii.gz
+  [SKIP] A00023131 (datauri=1138501): folder not on disk.
+  [SKIP] A00029226 (datauri=1484626): folder not on disk.
+  [SKIP] A00031764 (datauri=1611066): folder not on disk.
+  [OK] A00021058 -> A00021058_T1_3_7.nii.gz
+  [SKIP] A00014120 (datauri=1021794): folder not on disk.
+  [SKIP] A00029226 (datauri=1484626): folder not on disk.
+  [SKIP] A00031764 (datauri=1611066): folder not on disk.
+  [OK] A00021058 -> A00021058_T1_3_7.nii.gz
+  [SKIP] A00014120 (datauri=1021794): folder not on disk.
+  [OK] A00023848 -> A00023848_T1_3_7.nii.gz
+  [SKIP] A00014120 (datauri=1021794): folder not on disk.
+  [OK] A00023848 -> A00023848_T1_3_7.nii.gz
+  [OK] A00023848 -> A00023848_T1_3_7.nii.gz
+  [OK] A00037238 -> A00037238_T1_3_7.nii.gz
+  [OK] A00022727 -> A00022727_T1_3_7.nii.gz
+  [OK] A00026945 -> A00026945_T1_3_7.nii.gz
+  [SKIP] A00029452 (datauri=1520526): folder not on disk.
+  [SKIP] A00014225 (datauri=1029974): folder not on disk.
+  [OK] A00024446 -> A00024446_T1_3_7.nii.gz
+  [OK] A00036897 -> A00036897_T1_3_7.nii.gz
+  [OK] A00035751 -> A00035751_T1_3_7.nii.gz
+  [OK] A00026907 -> A00026907_T1_3_7.nii.gz
+  [OK] A00022727 -> A00022727_T1_3_7.nii.gz
+  [OK] A00026945 -> A00026945_T1_3_7.nii.gz
+  [SKIP] A00029452 (datauri=1520526): folder not on disk.
+  [SKIP] A00014225 (datauri=1029974): folder not on disk.
+  [OK] A00024446 -> A00024446_T1_3_7.nii.gz
+  [OK] A00036897 -> A00036897_T1_3_7.nii.gz
+  [OK] A00035751 -> A00035751_T1_3_7.nii.gz
+  [OK] A00026907 -> A00026907_T1_3_7.nii.gz
+  [SKIP] A00031478 (datauri=1538226): folder not on disk.
+  [OK] A00010150 -> A00010150_T1_3_7.nii.gz
+  [OK] A00020895 -> A00020895_T1_3_7.nii.gz
+  [OK] A00037665 -> A00037665_T1_3_7.nii.gz
+  [OK] A00004087 -> A00004087_T1_3_7.nii.gz
+  [OK] A00013363 -> A00013363_T1_3_7.nii.gz
+  [OK] A00021072 -> A00021072_T1_3_7.nii.gz
+  [OK] A00022727 -> A00022727_T1_3_7.nii.gz
+  [OK] A00026945 -> A00026945_T1_3_7.nii.gz
+  [SKIP] A00029452 (datauri=1520526): folder not on disk.
+  [SKIP] A00014225 (datauri=1029974): folder not on disk.
+  [OK] A00024446 -> A00024446_T1_3_7.nii.gz
+  [OK] A00036897 -> A00036897_T1_3_7.nii.gz
+  [OK] A00035751 -> A00035751_T1_3_7.nii.gz
+  [OK] A00026907 -> A00026907_T1_3_7.nii.gz
+  [SKIP] A00031478 (datauri=1538226): folder not on disk.
+  [OK] A00010150 -> A00010150_T1_3_7.nii.gz
+  [OK] A00020895 -> A00020895_T1_3_7.nii.gz
+  [OK] A00037665 -> A00037665_T1_3_7.nii.gz
+  [SKIP] A00031478 (datauri=1538226): folder not on disk.
+  [OK] A00010150 -> A00010150_T1_3_7.nii.gz
+  [OK] A00020895 -> A00020895_T1_3_7.nii.gz
+  [OK] A00037665 -> A00037665_T1_3_7.nii.gz
+  [OK] A00004087 -> A00004087_T1_3_7.nii.gz
+  [OK] A00013363 -> A00013363_T1_3_7.nii.gz
+  [OK] A00021072 -> A00021072_T1_3_7.nii.gz
+  [OK] A00022915 -> A00022915_T1_3_7.nii.gz
+  [OK] A00004087 -> A00004087_T1_3_7.nii.gz
+  [OK] A00013363 -> A00013363_T1_3_7.nii.gz
+  [OK] A00021072 -> A00021072_T1_3_7.nii.gz
+  [OK] A00022915 -> A00022915_T1_3_7.nii.gz
+  [OK] A00022729 -> A00022729_T1_3_7.nii.gz
+  [OK] A00023120 -> A00023120_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00019888 -> A00019888_T1_3_7.nii.gz
+  [OK] A00022773 -> A00022773_T1_3_7.nii.gz
+  [OK] A00023800 -> A00023800_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00019888 -> A00019888_T1_3_7.nii.gz
+  [OK] A00022773 -> A00022773_T1_3_7.nii.gz
+  [OK] A00023800 -> A00023800_T1_3_7.nii.gz
+  [OK] A00011725 -> A00011725_T1_3_7.nii.gz
+  [OK] A00012995 -> A00012995_T1_3_7.nii.gz
+  [OK] A00037495 -> A00037495_T1_3_7.nii.gz
+  [OK] A00037564 -> A00037564_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00019888 -> A00019888_T1_3_7.nii.gz
+  [OK] A00022773 -> A00022773_T1_3_7.nii.gz
+  [OK] A00023800 -> A00023800_T1_3_7.nii.gz
+  [OK] A00011725 -> A00011725_T1_3_7.nii.gz
+  [OK] A00012995 -> A00012995_T1_3_7.nii.gz
+  [OK] A00037495 -> A00037495_T1_3_7.nii.gz
+  [OK] A00037564 -> A00037564_T1_3_7.nii.gz
+  [OK] A00007409 -> A00007409_T1_3_7.nii.gz
+  [OK] A00019888 -> A00019888_T1_3_7.nii.gz
+  [OK] A00022773 -> A00022773_T1_3_7.nii.gz
+  [OK] A00023800 -> A00023800_T1_3_7.nii.gz
+  [OK] A00011725 -> A00011725_T1_3_7.nii.gz
+  [OK] A00012995 -> A00012995_T1_3_7.nii.gz
+  [OK] A00037495 -> A00037495_T1_3_7.nii.gz
+  [OK] A00037564 -> A00037564_T1_3_7.nii.gz
+  [OK] A00011725 -> A00011725_T1_3_7.nii.gz
+  [OK] A00012995 -> A00012995_T1_3_7.nii.gz
+  [OK] A00037495 -> A00037495_T1_3_7.nii.gz
+  [OK] A00037564 -> A00037564_T1_3_7.nii.gz
+  [OK] A00018335 -> A00018335_T1_3_7.nii.gz
+  [SKIP] A00023730 (datauri=1280706): folder not on disk.
+  [OK] A00022619 -> A00022619_T1_3_7.nii.gz
+  [OK] A00036555 -> A00036555_T1_3_7.nii.gz
+  [OK] A00022592 -> A00022592_T1_3_7.nii.gz
+  [SKIP] A00027487 (datauri=1301906): folder not on disk.
+  [OK] A00037318 -> A00037318_T1_3_7.nii.gz
+  [SKIP] A00015759 (datauri=1219166): folder not on disk.
+  [SKIP] A00033214 (datauri=1636366): folder not on disk.
+  [SKIP] A00010684 (datauri=1026534): folder not on disk.
+  [OK] A00036844 -> A00036844_T1_3_7.nii.gz
+  [OK] A00036916 -> A00036916_T1_3_7.nii.gz
+  [OK] A00036049 -> A00036049_T1_3_7.nii.gz
+  [OK] A00017294 -> A00017294_T1_3_7.nii.gz
+  [OK] A00024955 -> A00024955_T1_3_7.nii.gz
+  [OK] A00037007 -> A00037007_T1_3_7.nii.gz
+  [OK] A00024663 -> A00024663_T1_3_7.nii.gz
+  [OK] A00014522 -> A00014522_T1_3_7.nii.gz
+  [OK] A00036454 -> A00036454_T1_3_7.nii.gz
+  [OK] A00036463 -> A00036463_T1_3_7.nii.gz
+  [OK] A00036467 -> A00036467_T1_3_7.nii.gz
+  [OK] A00036475 -> A00036475_T1_3_7.nii.gz
+  [OK] A00036476 -> A00036476_T1_3_7.nii.gz
+  [OK] A00036388 -> A00036388_T1_3_7.nii.gz
+  [OK] A00036421 -> A00036421_T1_3_7.nii.gz
+  [OK] A00036248 -> A00036248_T1_3_7.nii.gz
+  [OK] A00036366 -> A00036366_T1_3_7.nii.gz
+  [OK] A00036452 -> A00036452_T1_3_7.nii.gz
+  [OK] A00036453 -> A00036453_T1_3_7.nii.gz
+  [OK] A00036462 -> A00036462_T1_3_7.nii.gz
+  [OK] A00036466 -> A00036466_T1_3_7.nii.gz
+  [OK] A00036468 -> A00036468_T1_3_7.nii.gz
+  [OK] A00036469 -> A00036469_T1_3_7.nii.gz
+  [OK] A00036523 -> A00036523_T1_3_7.nii.gz
+  [OK] A00036379 -> A00036379_T1_3_7.nii.gz
+  [OK] A00036415 -> A00036415_T1_3_7.nii.gz
+  [OK] A00036294 -> A00036294_T1_3_7.nii.gz
+  [OK] A00036300 -> A00036300_T1_3_7.nii.gz
+  [OK] A00036170 -> A00036170_T1_3_7.nii.gz
+  [OK] A00036401 -> A00036401_T1_3_7.nii.gz
+  [OK] A00036279 -> A00036279_T1_3_7.nii.gz
+  [OK] A00036500 -> A00036500_T1_3_7.nii.gz
+  [OK] A00036131 -> A00036131_T1_3_7.nii.gz
+  [OK] A00036169 -> A00036169_T1_3_7.nii.gz
+  [OK] A00036344 -> A00036344_T1_3_7.nii.gz
+  [SKIP] A00036236 (datauri=1923467): folder not on disk.
+  [OK] A00036457 -> A00036457_T1_3_7.nii.gz
+  [OK] A00036497 -> A00036497_T1_3_7.nii.gz
+  [OK] A00036299 -> A00036299_T1_3_7.nii.gz
+  [OK] A00036304 -> A00036304_T1_3_7.nii.gz
+  [OK] A00036446 -> A00036446_T1_3_7.nii.gz
+  [OK] A00036111 -> A00036111_T1_3_7.nii.gz
+  [OK] A00036297 -> A00036297_T1_3_7.nii.gz
+  [SKIP] A00036293 (datauri=1923473): folder not on disk.
+  [OK] A00036351 -> A00036351_T1_3_7.nii.gz
+  [OK] A00036196 -> A00036196_T1_3_7.nii.gz
+  [SKIP] A00036230 (datauri=1923188): folder not on disk.
+  [OK] A00036274 -> A00036274_T1_3_7.nii.gz
+  [OK] A00036330 -> A00036330_T1_3_7.nii.gz
+  [OK] A00036520 -> A00036520_T1_3_7.nii.gz
+  [OK] A00036309 -> A00036309_T1_3_7.nii.gz
+  [OK] A00036447 -> A00036447_T1_3_7.nii.gz
+  [OK] A00036123 -> A00036123_T1_3_7.nii.gz
+  [OK] A00036403 -> A00036403_T1_3_7.nii.gz
+  [SKIP] A00036455 (datauri=1923349): folder not on disk.
+  [OK] A00036519 -> A00036519_T1_3_7.nii.gz
+  [OK] A00036128 -> A00036128_T1_3_7.nii.gz
+  [OK] A00036209 -> A00036209_T1_3_7.nii.gz
+  [OK] A00036381 -> A00036381_T1_3_7.nii.gz
+  [OK] A00036289 -> A00036289_T1_3_7.nii.gz
+  [OK] A00036353 -> A00036353_T1_3_7.nii.gz
+  [OK] A00036137 -> A00036137_T1_3_7.nii.gz
+  [OK] A00036240 -> A00036240_T1_3_7.nii.gz
+  [OK] A00036213 -> A00036213_T1_3_7.nii.gz
+  [OK] A00036496 -> A00036496_T1_3_7.nii.gz
+  [OK] A00036138 -> A00036138_T1_3_7.nii.gz
+  [OK] A00036425 -> A00036425_T1_3_7.nii.gz
+  [OK] A00036284 -> A00036284_T1_3_7.nii.gz
+  [OK] A00036142 -> A00036142_T1_3_7.nii.gz
+  [OK] A00036263 -> A00036263_T1_3_7.nii.gz
+  [SKIP] A00036136 (datauri=1923171): folder not on disk.
+  [OK] A00036206 -> A00036206_T1_3_7.nii.gz
+  [OK] A00036281 -> A00036281_T1_3_7.nii.gz
+  [OK] A00036377 -> A00036377_T1_3_7.nii.gz
+  [OK] A00036291 -> A00036291_T1_3_7.nii.gz
+  [OK] A00036135 -> A00036135_T1_3_7.nii.gz
+  [OK] A00036419 -> A00036419_T1_3_7.nii.gz
+  [OK] A00036420 -> A00036420_T1_3_7.nii.gz
+  [OK] A00036247 -> A00036247_T1_3_7.nii.gz
+  [OK] A00036214 -> A00036214_T1_3_7.nii.gz
+  [OK] A00036276 -> A00036276_T1_3_7.nii.gz
+  [OK] A00036179 -> A00036179_T1_3_7.nii.gz
+  [OK] A00036321 -> A00036321_T1_3_7.nii.gz
+  [OK] A00036312 -> A00036312_T1_3_7.nii.gz
+  [OK] A00036477 -> A00036477_T1_3_7.nii.gz
+  [OK] A00036182 -> A00036182_T1_3_7.nii.gz
+  [OK] A00036212 -> A00036212_T1_3_7.nii.gz
+  [OK] A00036264 -> A00036264_T1_3_7.nii.gz
+  [OK] A00036328 -> A00036328_T1_3_7.nii.gz
+  [OK] A00036290 -> A00036290_T1_3_7.nii.gz
+  [SKIP] A00036358 (datauri=1923540): folder not on disk.
+  [SKIP] A00036359 (datauri=1923640): folder not on disk.
+  [OK] A00036404 -> A00036404_T1_3_7.nii.gz
+  [OK] A00036259 -> A00036259_T1_3_7.nii.gz
+  [SKIP] A00036292 (datauri=1923564): folder not on disk.
+  [OK] A00036338 -> A00036338_T1_3_7.nii.gz
+  [OK] A00036200 -> A00036200_T1_3_7.nii.gz
+  [OK] A00036427 -> A00036427_T1_3_7.nii.gz
+  [OK] A00036410 -> A00036410_T1_3_7.nii.gz
+  [OK] A00036521 -> A00036521_T1_3_7.nii.gz
+  [OK] A00036417 -> A00036417_T1_3_7.nii.gz
+  [OK] A00036498 -> A00036498_T1_3_7.nii.gz
+  [OK] A00036472 -> A00036472_T1_3_7.nii.gz
+  [OK] A00084672 -> A00084672_T1_3_7.nii.gz
+  [OK] A00084668 -> A00084668_T1_3_7.nii.gz
+  [OK] A00084670 -> A00084670_T1_3_7.nii.gz
+  [OK] A00084645 -> A00084645_T1_3_7.nii.gz
+  [OK] A00084666 -> A00084666_T1_3_7.nii.gz
+  [OK] A00084680 -> A00084680_T1_3_7.nii.gz
+  [OK] A00084641 -> A00084641_T1_3_7.nii.gz
+  [OK] A00084657 -> A00084657_T1_3_7.nii.gz
+  [OK] A00084684 -> A00084684_T1_3_7.nii.gz
+  [OK] A00084637 -> A00084637_T1_3_7.nii.gz
+  [OK] A00084638 -> A00084638_T1_3_7.nii.gz
+  [OK] A00084642 -> A00084642_T1_3_7.nii.gz
+  [OK] A00084663 -> A00084663_T1_3_7.nii.gz
+  [OK] A00084675 -> A00084675_T1_3_7.nii.gz
+  [OK] A00084669 -> A00084669_T1_3_7.nii.gz
+  [OK] A00084655 -> A00084655_T1_3_7.nii.gz
+  [OK] A00084662 -> A00084662_T1_3_7.nii.gz
+  [OK] A00084667 -> A00084667_T1_3_7.nii.gz
+  [OK] A00084683 -> A00084683_T1_3_7.nii.gz
+  [OK] A00084658 -> A00084658_T1_3_7.nii.gz
+  [OK] A00084639 -> A00084639_T1_3_7.nii.gz
+  [OK] A00084682 -> A00084682_T1_3_7.nii.gz
+  [OK] A00084640 -> A00084640_T1_3_7.nii.gz
+  [OK] A00084653 -> A00084653_T1_3_7.nii.gz
+  [OK] A00084660 -> A00084660_T1_3_7.nii.gz
+  [OK] A00084654 -> A00084654_T1_3_7.nii.gz
+  [OK] A00084674 -> A00084674_T1_3_7.nii.gz
+  [OK] A00084677 -> A00084677_T1_3_7.nii.gz
+  [OK] A00084673 -> A00084673_T1_3_7.nii.gz
+  [OK] A00084681 -> A00084681_T1_3_7.nii.gz
+  [OK] A00084636 -> A00084636_T1_3_7.nii.gz
+  [OK] A00084647 -> A00084647_T1_3_7.nii.gz
+  [OK] A00084659 -> A00084659_T1_3_7.nii.gz
+  [OK] A00084676 -> A00084676_T1_3_7.nii.gz
+  [OK] A00084648 -> A00084648_T1_3_7.nii.gz
+  [OK] A00084671 -> A00084671_T1_3_7.nii.gz
+  [OK] A00084678 -> A00084678_T1_3_7.nii.gz
+  [OK] A00084650 -> A00084650_T1_3_7.nii.gz
+  [OK] A00084664 -> A00084664_T1_3_7.nii.gz
+  [OK] A00084665 -> A00084665_T1_3_7.nii.gz
+  [OK] A00084651 -> A00084651_T1_3_7.nii.gz
+  [OK] A00084656 -> A00084656_T1_3_7.nii.gz
+  [OK] A00084646 -> A00084646_T1_3_7.nii.gz
+  [OK] A00084643 -> A00084643_T1_3_7.nii.gz
+  [OK] A00084644 -> A00084644_T1_3_7.nii.gz
+  [OK] A00084649 -> A00084649_T1_3_7.nii.gz
+  [OK] A00084652 -> A00084652_T1_3_7.nii.gz
+  [OK] A00084661 -> A00084661_T1_3_7.nii.gz
+  [OK] A00084679 -> A00084679_T1_3_7.nii.gz
+  [OK] A00003162 -> A00003162_T1_3_7.nii.gz
+  [OK] A00017368 -> A00017368_T1_3_7.nii.gz
+  [OK] A00017005 -> A00017005_T1_3_7.nii.gz
+  [OK] A00005936 -> A00005936_T1_3_7.nii.gz
+  [OK] A00014887 -> A00014887_T1_3_7.nii.gz
+  [OK] A00009357 -> A00009357_T1_3_7.nii.gz
+  [OK] A00007745 -> A00007745_T1_3_7.nii.gz
+  [SKIP] A00032885 (datauri=1612846): folder not on disk.
+  [OK] A00010443 -> A00010443_T1_3_7.nii.gz
+  [OK] A00005936 -> A00005936_T1_3_7.nii.gz
+  [OK] A00014887 -> A00014887_T1_3_7.nii.gz
+  [OK] A00009357 -> A00009357_T1_3_7.nii.gz
+  [OK] A00007745 -> A00007745_T1_3_7.nii.gz
+  [SKIP] A00032885 (datauri=1612846): folder not on disk.
+  [OK] A00010443 -> A00010443_T1_3_7.nii.gz
+  [OK] A00014887 -> A00014887_T1_3_7.nii.gz
+  [OK] A00009357 -> A00009357_T1_3_7.nii.gz
+  [OK] A00007745 -> A00007745_T1_3_7.nii.gz
+  [SKIP] A00032885 (datauri=1612846): folder not on disk.
+  [OK] A00010443 -> A00010443_T1_3_7.nii.gz
+  [SKIP] A00028885 (datauri=1443486): folder not on disk.
+  [OK] A00015581 -> A00015581_T1_3_7.nii.gz
+  [SKIP] A00011739 (datauri=1248946): folder not on disk.
+  [OK] A00018145 -> A00018145_T1_3_7.nii.gz
+  [SKIP] A00028685 (datauri=1420586): folder not on disk.
+  [OK] A00009949 -> A00009949_T1_3_7.nii.gz
+  [SKIP] A00028885 (datauri=1443486): folder not on disk.
+  [OK] A00015581 -> A00015581_T1_3_7.nii.gz
+  [SKIP] A00011739 (datauri=1248946): folder not on disk.
+  [OK] A00018145 -> A00018145_T1_3_7.nii.gz
+  [SKIP] A00028685 (datauri=1420586): folder not on disk.
+  [OK] A00009949 -> A00009949_T1_3_7.nii.gz
+  [OK] A00019877 -> A00019877_T1_3_7.nii.gz
+  [SKIP] A00027839 (datauri=1177726): folder not on disk.
+  [OK] A00003413 -> A00003413_T1_3_7.nii.gz
+  [OK] A00015328 -> A00015328_T1_3_7.nii.gz
+  [OK] A00017500 -> A00017500_T1_3_7.nii.gz
+  [SKIP] A00034389 (datauri=1714146): folder not on disk.
+  [OK] A00000828 -> A00000828_T1_3_7.nii.gz
+  [OK] A00012180 -> A00012180_T1_3_7.nii.gz
+  [OK] A00026996 -> A00026996_T1_3_7.nii.gz
+  [OK] A00017937 -> A00017937_T1_3_7.nii.gz
+  [OK] A00034392 -> A00034392_T1_3_7.nii.gz
+  [SKIP] A00001853 (datauri=1054174): folder not on disk.
+  [OK] A00012617 -> A00012617_T1_3_7.nii.gz
+  [OK] A00018253 -> A00018253_T1_3_7.nii.gz
+  [OK] A00019819 -> A00019819_T1_3_7.nii.gz
+  [SKIP] A00027520 (datauri=1018974): folder not on disk.
+  [OK] A00001530 -> A00001530_T1_3_7.nii.gz
+  [OK] A00017691 -> A00017691_T1_3_7.nii.gz
+  [OK] A00017726 -> A00017726_T1_3_7.nii.gz
+  [SKIP] A00008608 (datauri=1002374): folder not on disk.
+  [SKIP] A00011415 (datauri=1094674): folder not on disk.
+  [SKIP] A00037139 (datauri=1050854): folder not on disk.
+  [SKIP] A00014509 (datauri=1099374): folder not on disk.
+  [SKIP] A00019900 (datauri=1103054): folder not on disk.
+  [OK] A00031429 -> A00031429_T1_3_7.nii.gz
+  [OK] A00033646 -> A00033646_T1_3_7.nii.gz
+  [OK] A00039384 -> A00039384_T1_3_7.nii.gz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ['A00024932', 'A00025969', 'A00014898', 'A00028406', 'A00028409', 'A00014839', 'A00027787', 'A00028052', 'A00009946', 'A00023131', 'A00029226', 'A00031764', 'A00014120', 'A00029452', 'A00014225', 'A00031478', 'A00023730', 'A00027487', 'A00015759', 'A00033214', 'A00010684', 'A00036236', 'A00036293', 'A00036230', 'A00036455', 'A00036136', 'A00036358', 'A00036359', 'A00036292', 'A00032885', 'A00028885', 'A00011739', 'A00028685', 'A00027839', 'A00034389', 'A00001853', 'A00027520', 'A00008608', 'A00011415', 'A00037139', 'A00014509', 'A00019900', 'A00020630', 'A00013059', 'A00005231', 'A00034096', 'A00019823', 'A00031788', 'A00037613', 'A00009948']
+
+
+
+
+
+
+
+
+
+  bash /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/pre-processing/preprocess_from_csv.sh \
+  /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/test_5.csv \
+  2
+
+	
+
+	watch -n 3 'echo "=== RAM ===" && free -h && echo "" && echo "=== FSL PROCS ===" && ps aux --sort=-%mem | grep -E "fnirt|fast|bet|flirt" | grep -v grep | head -15'
+
+  nohup bash /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/pre-processing/preprocess_from_csv.sh \
+  /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/master_scan_list.csv \
+  15 &
+
+  tail -f /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/pre-processing/PP_logs/master.log
+
+  tail -f /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/pre-processing/PP_logs/master.log
+D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan

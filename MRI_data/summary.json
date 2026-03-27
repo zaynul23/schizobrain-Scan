@@ -7,11 +7,11 @@
 
             "https://openneuro.org/datasets/ds005073/versions/1.0.0": [{"schiz": 16, "bipolar": 15,"DS_CODE":2},"claims skull stripped but need to investigate further "],
             "https://openneuro.org/datasets/ds000115/versions/00001":  {"schiz": 23, "healthy": 20, "schiz_sibling": 35, "healthy_sib": 21,"DS_CODE":3},
-            "https://openneuro.org/datasets/ds000030/versions/1.0.0":  {"healthy": 67, "schiz": 96, "bipolar": 49, "adhd": 43,"DS_CODE":4},
+            "https://openneuro.org/datasets/ds000030/versions/1.0.0":  {"healthy": 50, "schiz": 125, "bipolar": 49, "adhd": 43,"DS_CODE":4},
             "https://openneuro.org/datasets/ds003011/versions/1.2.3":  {"schiz": 4 ,"DS_CODE":5}
             },
         "NITRC ":{
-                "https://www.nitrc.org/ir/app/action/DisplayItemAction/search_element/xnat%3AprojectData/search_field/xnat%3AprojectData.ID/search_value/NUDataSharing": {"schiz":139, "healthy": 136,"DS_CODE":6}
+                "https://www.nitrc.org/ir/app/action/DisplayItemAction/search_element/xnat%3AprojectData/search_field/xnat%3AprojectData.ID/search_value/NUDataSharing": {"schiz":96, "healthy": 67,"DS_CODE":6}
             },
         "Schizconnect ":{
                 "https://www.nitrc.org/ir/app/action/DisplayItemAction/search_element/xnat%3AprojectData/search_field/xnat%3AprojectData.ID/search_value/NUDataSharing": {"schiz":79, "DS_CODE":7}
