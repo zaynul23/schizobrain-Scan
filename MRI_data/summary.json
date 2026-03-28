@@ -1,5 +1,5 @@
 {
-    "total subs":{"schiz":329,"healthy":312,"first_ep_affective_psychosis":8,"schiz_sibling":35,"healthy_sibling":21,"bipolar":64,"adhd":43},
+    "total subs":{"schiz+control":875,"schiz":361,"healthy":514,"first_ep_affective_psychosis":8,"schiz_sibling":35,"healthy_sibling":21,"bipolar":64,"adhd":43,"corrupt":1},
     "sources": {
         "open neuro ":{
             "https://openneuro.org/datasets/ds004302/versions/1.0.1":  [{"schiz":71,"DS_CODE":0},"raw data no skull strip "],
@@ -11,10 +11,11 @@
             "https://openneuro.org/datasets/ds003011/versions/1.2.3":  {"schiz": 4 ,"DS_CODE":5}
             },
         "NITRC ":{
-                "https://www.nitrc.org/ir/app/action/DisplayItemAction/search_element/xnat%3AprojectData/search_field/xnat%3AprojectData.ID/search_value/NUDataSharing": {"schiz":96, "healthy": 67,"DS_CODE":6}
+                "https://www.nitrc.org/ir/app/action/DisplayItemAction/search_element/xnat%3AprojectData/search_field/xnat%3AprojectData.ID/search_value/NUDataSharing": {"schiz":96, "healthy": 66,"corrupt":1,"DS_CODE":6}
             },
         "Schizconnect ":{
-                "https://www.nitrc.org/ir/app/action/DisplayItemAction/search_element/xnat%3AprojectData/search_field/xnat%3AprojectData.ID/search_value/NUDataSharing": {"schiz":79, "DS_CODE":7}
+                "https://www.nitrc.org/ir/app/action/DisplayItemAction/search_element/xnat%3AprojectData/search_field/xnat%3AprojectData.ID/search_value/NUDataSharing": {"schiz":79, "DS_CODE":7},
+                "schiz connect healthy control query": {"control":277, "DS_CODE":7}
             }
     }
 }

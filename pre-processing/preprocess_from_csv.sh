@@ -170,7 +170,7 @@ win_to_wsl() {
 log() {
     local level="$1"; shift
     local msg="$*"
-    local line="[$(date '+%H:%M:%S')][$level] $msg"
+    local line="[$(date '+%H:%M:%S')][$level] $msg  [job=${JOB_NUM:-?}]"
     echo "$line"
     ( flock -x 9; echo "$line" >> "$AGGREGATE_LOG" ) 9>> "$AGGREGATE_LOG"
 }
@@ -189,6 +189,7 @@ process_scan() {
 
     local FILENAME="$1"
     local WIN_FILEPATH="$2"
+    local JOB_NUM="${3:-?}"
 
     local INPUT
     INPUT=$(win_to_wsl "$WIN_FILEPATH")
@@ -199,7 +200,7 @@ process_scan() {
     local NIFTI_DIR SCANS_DIR OUTPUT_DIR SUBJECT_DIR
     NIFTI_DIR=$(dirname "$INPUT")
     SCANS_DIR=$(dirname "$NIFTI_DIR")
-    OUTPUT_DIR="$SCANS_DIR/preprocessed"
+    OUTPUT_DIR="$(dirname "$SCANS_DIR")/preprocessed"
     SUBJECT_DIR="$OUTPUT_DIR/PP_${BASENAME}"
 
     local QC_FILE="$SUBJECT_DIR/${BASENAME}_qc.txt"
@@ -230,7 +231,7 @@ process_scan() {
     trap 'rm -rf "$TEMP_DIR"' EXIT
 
     local START_TIME=$SECONDS
-    log "START" "$BASENAME"
+    log "START" "$BASENAME  [job=${JOB_NUM}]"
 
     # Named intermediates
     local STD="$TEMP_DIR/std.nii.gz"
@@ -538,8 +539,7 @@ process_scan() {
 
     local ELAPSED=$(( SECONDS - START_TIME ))
     qc_append "${BASENAME}\t${QC_STATUS}\t${DIM_X}\t${DIM_Y}\t${DIM_Z}\t${GM_FRAC}\t${HAS_NAN}\t${BRAIN_VOL}\t${ELAPSED}\t${QC_NOTES}"
-    log "DONE " "$BASENAME  [dims=${DIM_STR}  gm=${GM_FRAC}  vol=${BRAIN_VOL}mm3  ${ELAPSED}s  ${QC_STATUS}]"
-    return 0
+    log "DONE " "$BASENAME  [dims=${DIM_STR}  gm=${GM_FRAC}  vol=${BRAIN_VOL}mm3  ${ELAPSED}s  ${QC_STATUS}  job=${JOB_NUM}]"    return 0
 }
 
 export -f process_scan
@@ -644,11 +644,13 @@ wait_for_slot() {
 
 log "INFO " "Starting preprocessing of $TOTAL subjects (max $MAX_JOBS parallel)"
 
+JOB_NUM=0
 while IFS= read -r LINE; do
     FILENAME="${LINE%%|*}"
     FILEPATH="${LINE#*|}"
     wait_for_slot
-    process_scan "$FILENAME" "$FILEPATH" &
+    JOB_NUM=$((JOB_NUM + 1))
+    process_scan "$FILENAME" "$FILEPATH" "$JOB_NUM" &
     PID=$!
     track_job "$PID" "$FILENAME"
 done < "$TMPLIST"
