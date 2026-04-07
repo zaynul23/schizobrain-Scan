@@ -450,5 +450,5 @@ D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan
 /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/open_neuro/open_neuro_2_16/scans/NIFTI/sub-S06_rec-1_T1w_1_2.nii.gz
 /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/NITRC/NUSDAST/scans/NIFTI/CC0717_3_6.nii.gz
 /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/NITRC/NUSDAST/scans/NIFTI/CC0197_1_6.nii.gz
-
+/mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/NITRC/schizbull/scans/SS_084/SS_084_procimg.nii.gz
 /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/open_neuro/open_neuro_1_26/scans/preprocessed/PP_sub-2419A_ses-0001_T1w_1_1/sub-2419A_ses-0001_T1w_1_1_preprocessed.nii.gz
