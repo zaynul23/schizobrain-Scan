@@ -452,3 +452,212 @@ D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan
 /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/NITRC/NUSDAST/scans/NIFTI/CC0197_1_6.nii.gz
 /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/NITRC/schizbull/scans/SS_084/SS_084_procimg.nii.gz
 /mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/open_neuro/open_neuro_1_26/scans/preprocessed/PP_sub-2419A_ses-0001_T1w_1_1/sub-2419A_ses-0001_T1w_1_1_preprocessed.nii.gz
+
+
+
+
+
+
+python model_FC.py --csv D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\master_scan_list.csv --batch-size 4 --device cuda --epochs 150 --patience 25
+
+python model_FCV4.py --csv D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\MRI_data\master_scan_list_v2.csv --batch-size 14 --device cuda --epochs 150 --output-dir runs_v6 --patience 25 --amp --adv-lambda 0
+
+python model_FC_GPT.py  --csv D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\MRI_data\master_scan_list_v2.csv  --batch-size 14  --device cuda  --epochs 150  --output-dir runs_v4  --patience 25  --adv-lambda 0.03  --amp
+
+
+
+
+/mnt/d/zaynu/Documents/coding/PS/2-2/schizobrain-Scan/MRI_data/open_neuro/open_neuro_4_50/preprocessed2/PP_sub-10159_T1w_3_4/sub-10159_T1w_3_4_preprocessed.nii.gz
+
+
+
+
+
+(model_venv) PS D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\model_build> python model_FCV4.py --csv D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\MRI_data\master_scan_list_v2.csv --batch-size 14 --device cuda --epochs 150 --output-dir runs_v4 --patience 20
+[21:35:28] INFO - Device: cuda
+[21:35:28] INFO - Found 821 preprocessed scans, skipped 3
+[21:35:28] INFO - Labels: {1: 335, 0: 486}
+[21:35:28] INFO - Sites:  {0: 71, 2: 16, 3: 43, 4: 175, 6: 162, 7: 354}
+[21:35:28] INFO - LOSO sites: [0, 2, 3, 4, 6, 7]
+[21:35:28] WARNING - FOLD 0: DS0 single-class ({1}). AUC undefined.
+[21:35:28] INFO - 
+============================================================
+[21:35:28] INFO - FOLD 0: Test site = DS0
+[21:35:28] INFO -   Train: 750 | Test: 71
+[21:35:28] INFO -   Train labels: {1: 264, 0: 486}
+[21:35:28] INFO -   Test  labels: {1: 71}
+[21:35:28] INFO -   Training sites: {2: 0, 3: 1, 4: 2, 6: 3, 7: 4} (5 sites)
+[21:35:28] INFO -   Train sub: 639 | Val sub: 111
+[21:35:28] INFO -   Parameters: 648,902
+[21:35:28] INFO -   Mixed precision (FP16) enabled
+[21:36:18] INFO -   E  1 | d_loss=1.1125 s_loss=1.5834 alpha=0.03 tr_acc=0.489 | val_auc=0.372 val_acc=0.649 | lr=1.1e-04 47.6s
+[21:36:34] INFO -   E  2 | d_loss=1.0280 s_loss=1.5710 alpha=0.07 tr_acc=0.527 | val_auc=0.452 val_acc=0.351 | lr=2.1e-04 16.4s
+[21:36:51] INFO -   E  3 | d_loss=0.9728 s_loss=1.4061 alpha=0.10 tr_acc=0.543 | val_auc=0.427 val_acc=0.351 | lr=3.0e-04 16.1s
+[21:37:22] INFO -   E  5 | d_loss=0.9935 s_loss=1.4126 alpha=0.17 tr_acc=0.470 | val_auc=0.588 val_acc=0.351 | lr=5.0e-04 16.3s
+[21:38:44] INFO -   E 10 | d_loss=0.9447 s_loss=1.3707 alpha=0.32 tr_acc=0.498 | val_auc=0.602 val_acc=0.351 | lr=3.8e-04 17.6s
+[21:40:06] INFO -   E 15 | d_loss=0.9354 s_loss=1.3673 alpha=0.46 tr_acc=0.498 | val_auc=0.663 val_acc=0.351 | lr=1.3e-04 16.2s
+[21:41:24] INFO -   E 20 | d_loss=0.9342 s_loss=1.3225 alpha=0.58 tr_acc=0.494 | val_auc=0.647 val_acc=0.351 | lr=5.0e-04 15.8s
+[21:42:41] INFO -   E 25 | d_loss=0.9339 s_loss=1.3248 alpha=0.68 tr_acc=0.495 | val_auc=0.703 val_acc=0.351 | lr=4.7e-04 15.7s
+[21:44:03] INFO -   E 30 | d_loss=0.9294 s_loss=1.3355 alpha=0.76 tr_acc=0.483 | val_auc=0.584 val_acc=0.351 | lr=3.8e-04 16.7s
+[21:45:21] INFO -   E 35 | d_loss=0.9118 s_loss=1.3582 alpha=0.82 tr_acc=0.514 | val_auc=0.774 val_acc=0.351 | lr=2.6e-04 15.0s
+[21:46:41] INFO -   E 40 | d_loss=0.9167 s_loss=1.3346 alpha=0.87 tr_acc=0.503 | val_auc=0.724 val_acc=0.351 | lr=1.3e-04 18.4s
+[21:48:08] INFO -   E 45 | d_loss=0.8911 s_loss=1.2647 alpha=0.91 tr_acc=0.565 | val_auc=0.730 val_acc=0.351 | lr=4.3e-05 19.4s
+[21:49:33] INFO -   E 50 | d_loss=0.8947 s_loss=1.3382 alpha=0.93 tr_acc=0.546 | val_auc=0.779 val_acc=0.387 | lr=5.0e-04 16.5s
+[21:50:22] INFO -   Early stop at epoch 53, best val AUC=0.7867
+[21:50:24] INFO -   Optimal threshold from val: 0.563 (raw=0.563, Youden's J=0.511)
+[21:50:24] INFO -   Running TTA (4 augmentations per scan)...
+D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\model_build\model_venv\lib\site-packages\sklearn\metrics\_ranking.py:424: UndefinedMetricWarning: Only one class is present in y_true. ROC AUC score is not defined in that case.
+  warnings.warn(
+[21:50:32] INFO -   TEST DS0 (TTA @0.5): AUC=nan Acc=1.000 Sens=1.000 Spec=0.000 F1=1.000 | TTA: 0.11s/scan
+[21:50:33] WARNING - FOLD 1: DS2 single-class ({1}). AUC undefined.
+[21:50:33] INFO - 
+============================================================
+[21:50:33] INFO - FOLD 1: Test site = DS2
+[21:50:33] INFO -   Train: 805 | Test: 16
+[21:50:33] INFO -   Train labels: {1: 319, 0: 486}
+[21:50:33] INFO -   Test  labels: {1: 16}
+[21:50:33] INFO -   Training sites: {0: 0, 3: 1, 4: 2, 6: 3, 7: 4} (5 sites)
+[21:50:33] INFO -   Train sub: 686 | Val sub: 119
+[21:50:33] INFO -   Mixed precision (FP16) enabled
+[21:51:19] INFO -   E  1 | d_loss=0.9735 s_loss=1.7048 alpha=0.03 tr_acc=0.483 | val_auc=0.588 val_acc=0.597 | lr=1.1e-04 46.5s
+[21:51:37] INFO -   E  2 | d_loss=0.9315 s_loss=1.6491 alpha=0.07 tr_acc=0.512 | val_auc=0.844 val_acc=0.395 | lr=2.1e-04 18.1s
+[21:51:55] INFO -   E  3 | d_loss=0.8911 s_loss=1.5861 alpha=0.10 tr_acc=0.488 | val_auc=0.844 val_acc=0.395 | lr=3.0e-04 18.0s
+[21:52:28] INFO -   E  5 | d_loss=0.8949 s_loss=1.5196 alpha=0.17 tr_acc=0.509 | val_auc=0.311 val_acc=0.395 | lr=5.0e-04 16.2s
+[21:53:55] INFO -   E 10 | d_loss=0.8705 s_loss=1.4752 alpha=0.32 tr_acc=0.513 | val_auc=0.796 val_acc=0.395 | lr=3.8e-04 17.1s
+[21:55:19] INFO -   E 15 | d_loss=0.8361 s_loss=1.4279 alpha=0.46 tr_acc=0.558 | val_auc=0.731 val_acc=0.395 | lr=1.3e-04 18.1s
+[21:56:43] INFO -   E 20 | d_loss=0.8390 s_loss=1.4430 alpha=0.58 tr_acc=0.534 | val_auc=0.826 val_acc=0.403 | lr=5.0e-04 16.7s
+[21:58:06] INFO -   E 25 | d_loss=0.8235 s_loss=1.4478 alpha=0.68 tr_acc=0.573 | val_auc=0.898 val_acc=0.571 | lr=4.7e-04 16.9s
+[21:59:29] INFO -   E 30 | d_loss=0.7966 s_loss=1.3931 alpha=0.76 tr_acc=0.618 | val_auc=0.858 val_acc=0.639 | lr=3.8e-04 16.5s
+[22:00:53] INFO -   E 35 | d_loss=0.8033 s_loss=1.3375 alpha=0.82 tr_acc=0.605 | val_auc=0.843 val_acc=0.571 | lr=2.6e-04 16.5s
+[22:02:15] INFO -   E 40 | d_loss=0.7382 s_loss=1.3037 alpha=0.87 tr_acc=0.694 | val_auc=0.872 val_acc=0.555 | lr=1.3e-04 16.4s
+[22:03:37] INFO -   E 45 | d_loss=0.7189 s_loss=1.3001 alpha=0.91 tr_acc=0.666 | val_auc=0.878 val_acc=0.832 | lr=4.3e-05 16.4s
+[22:04:11] INFO -   Early stop at epoch 47, best val AUC=0.9048
+[22:04:13] INFO -   Optimal threshold from val: 0.507 (raw=0.507, Youden's J=0.707)
+[22:04:13] INFO -   Running TTA (4 augmentations per scan)...
+D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\model_build\model_venv\lib\site-packages\sklearn\metrics\_ranking.py:424: UndefinedMetricWarning: Only one class is present in y_true. ROC AUC score is not defined in that case.
+  warnings.warn(
+[22:04:14] INFO -   TEST DS2 (TTA @0.5): AUC=nan Acc=0.688 Sens=0.688 Spec=0.000 F1=0.815 | TTA: 0.10s/scan
+[22:04:15] INFO - 
+============================================================
+[22:04:15] INFO - FOLD 2: Test site = DS3
+[22:04:15] INFO -   Train: 778 | Test: 43
+[22:04:15] INFO -   Train labels: {1: 312, 0: 466}
+[22:04:15] INFO -   Test  labels: {1: 23, 0: 20}
+[22:04:15] INFO -   Training sites: {0: 0, 2: 1, 4: 2, 6: 3, 7: 4} (5 sites)
+[22:04:15] INFO -   Train sub: 663 | Val sub: 115
+[22:04:15] INFO -   Mixed precision (FP16) enabled
+[22:04:55] INFO -   E  1 | d_loss=0.9148 s_loss=1.7357 alpha=0.03 tr_acc=0.509 | val_auc=0.317 val_acc=0.400 | lr=1.1e-04 39.3s
+[22:05:10] INFO -   E  2 | d_loss=0.9064 s_loss=1.6224 alpha=0.07 tr_acc=0.511 | val_auc=0.582 val_acc=0.400 | lr=2.1e-04 15.7s
+[22:05:27] INFO -   E  3 | d_loss=0.8978 s_loss=1.5779 alpha=0.10 tr_acc=0.509 | val_auc=0.716 val_acc=0.400 | lr=3.0e-04 16.1s
+[22:05:58] INFO -   E  5 | d_loss=0.8620 s_loss=1.5090 alpha=0.17 tr_acc=0.532 | val_auc=0.741 val_acc=0.400 | lr=5.0e-04 15.6s
+[22:07:16] INFO -   E 10 | d_loss=0.8480 s_loss=1.4039 alpha=0.32 tr_acc=0.530 | val_auc=0.723 val_acc=0.435 | lr=3.8e-04 15.3s
+[22:08:35] INFO -   E 15 | d_loss=0.8314 s_loss=1.3939 alpha=0.46 tr_acc=0.527 | val_auc=0.758 val_acc=0.426 | lr=1.3e-04 15.7s
+[22:09:53] INFO -   E 20 | d_loss=0.8440 s_loss=1.3661 alpha=0.58 tr_acc=0.509 | val_auc=0.781 val_acc=0.574 | lr=5.0e-04 15.6s
+[22:11:11] INFO -   E 25 | d_loss=0.7940 s_loss=1.3200 alpha=0.68 tr_acc=0.616 | val_auc=0.801 val_acc=0.696 | lr=4.7e-04 15.8s
+[22:12:30] INFO -   E 30 | d_loss=0.7685 s_loss=1.3078 alpha=0.76 tr_acc=0.634 | val_auc=0.812 val_acc=0.730 | lr=3.8e-04 15.8s
+[22:13:49] INFO -   E 35 | d_loss=0.7327 s_loss=1.2547 alpha=0.82 tr_acc=0.673 | val_auc=0.836 val_acc=0.565 | lr=2.6e-04 15.6s
+[22:15:08] INFO -   E 40 | d_loss=0.7038 s_loss=1.3085 alpha=0.87 tr_acc=0.704 | val_auc=0.836 val_acc=0.696 | lr=1.3e-04 15.8s
+[22:16:27] INFO -   E 45 | d_loss=0.7075 s_loss=1.2374 alpha=0.91 tr_acc=0.707 | val_auc=0.849 val_acc=0.687 | lr=4.3e-05 15.6s
+[22:17:46] INFO -   E 50 | d_loss=0.7027 s_loss=1.2398 alpha=0.93 tr_acc=0.688 | val_auc=0.857 val_acc=0.748 | lr=5.0e-04 16.1s
+[22:19:05] INFO -   E 55 | d_loss=0.6956 s_loss=1.2542 alpha=0.95 tr_acc=0.710 | val_auc=0.842 val_acc=0.661 | lr=4.9e-04 15.7s
+[22:19:21] INFO -   Early stop at epoch 56, best val AUC=0.8582
+[22:19:22] INFO -   Optimal threshold from val: 0.561 (raw=0.561, Youden's J=0.623)
+[22:19:22] INFO -   Running TTA (4 augmentations per scan)...
+[22:19:26] INFO -   TEST @opt=0.561: Acc=0.674 Sens=0.435 Spec=0.950
+[22:19:26] INFO -   TEST DS3 (TTA @0.5): AUC=0.850 Acc=0.698 Sens=0.478 Spec=0.950 F1=0.629 | TTA: 0.09s/scan
+[22:19:27] INFO - 
+============================================================
+[22:19:27] INFO - FOLD 3: Test site = DS4
+[22:19:27] INFO -   Train: 646 | Test: 175
+[22:19:27] INFO -   Train labels: {1: 285, 0: 361}
+[22:19:27] INFO -   Test  labels: {0: 125, 1: 50}
+[22:19:27] INFO -   Training sites: {0: 0, 2: 1, 3: 2, 6: 3, 7: 4} (5 sites)
+[22:19:27] INFO -   Train sub: 550 | Val sub: 96
+[22:19:27] INFO -   Mixed precision (FP16) enabled
+[22:20:05] INFO -   E  1 | d_loss=0.8471 s_loss=2.3496 alpha=0.03 tr_acc=0.522 | val_auc=0.426 val_acc=0.438 | lr=1.1e-04 37.5s
+[22:20:18] INFO -   E  2 | d_loss=0.8451 s_loss=1.9657 alpha=0.07 tr_acc=0.520 | val_auc=0.224 val_acc=0.542 | lr=2.1e-04 13.2s
+[22:20:31] INFO -   E  3 | d_loss=0.8210 s_loss=1.4960 alpha=0.10 tr_acc=0.518 | val_auc=0.778 val_acc=0.667 | lr=3.0e-04 13.0s
+[22:20:57] INFO -   E  5 | d_loss=0.8250 s_loss=1.3854 alpha=0.17 tr_acc=0.484 | val_auc=0.786 val_acc=0.667 | lr=5.0e-04 13.0s
+[22:22:02] INFO -   E 10 | d_loss=0.7933 s_loss=1.3446 alpha=0.32 tr_acc=0.535 | val_auc=0.650 val_acc=0.438 | lr=3.8e-04 12.8s
+[22:23:08] INFO -   E 15 | d_loss=0.7739 s_loss=1.2931 alpha=0.46 tr_acc=0.577 | val_auc=0.607 val_acc=0.438 | lr=1.3e-04 13.1s
+[22:24:14] INFO -   E 20 | d_loss=0.7804 s_loss=1.2816 alpha=0.58 tr_acc=0.511 | val_auc=0.674 val_acc=0.438 | lr=5.0e-04 13.1s
+[22:25:07] INFO -   Early stop at epoch 24, best val AUC=0.7857
+[22:25:09] INFO -   Optimal threshold from val: 0.505 (raw=0.505, Youden's J=0.540)
+[22:25:09] INFO -   Running TTA (4 augmentations per scan)...
+[22:25:24] INFO -   TEST @opt=0.505: Acc=0.286 Sens=0.940 Spec=0.024
+[22:25:24] INFO -   TEST DS4 (TTA @0.5): AUC=0.492 Acc=0.286 Sens=0.980 Spec=0.008 F1=0.439 | TTA: 0.09s/scan
+[22:25:25] INFO - 
+============================================================
+[22:25:25] INFO - FOLD 4: Test site = DS6
+[22:25:25] INFO -   Train: 659 | Test: 162
+[22:25:25] INFO -   Train labels: {1: 239, 0: 420}
+[22:25:25] INFO -   Test  labels: {1: 96, 0: 66}
+[22:25:25] INFO -   Training sites: {0: 0, 2: 1, 3: 2, 4: 3, 7: 4} (5 sites)
+[22:25:25] INFO -   Train sub: 561 | Val sub: 98
+[22:25:25] INFO -   Mixed precision (FP16) enabled
+[22:26:02] INFO -   E  1 | d_loss=0.9947 s_loss=1.6585 alpha=0.03 tr_acc=0.498 | val_auc=0.763 val_acc=0.643 | lr=1.1e-04 36.3s
+[22:26:15] INFO -   E  2 | d_loss=0.9841 s_loss=1.5967 alpha=0.07 tr_acc=0.477 | val_auc=0.427 val_acc=0.378 | lr=2.1e-04 13.7s
+[22:26:28] INFO -   E  3 | d_loss=0.9986 s_loss=1.4424 alpha=0.10 tr_acc=0.486 | val_auc=0.756 val_acc=0.357 | lr=3.0e-04 13.0s
+[22:26:56] INFO -   E  5 | d_loss=0.9521 s_loss=1.4009 alpha=0.17 tr_acc=0.491 | val_auc=0.721 val_acc=0.357 | lr=5.0e-04 13.6s
+[22:28:04] INFO -   E 10 | d_loss=0.9219 s_loss=1.3628 alpha=0.32 tr_acc=0.516 | val_auc=0.716 val_acc=0.357 | lr=3.8e-04 14.4s
+[22:29:15] INFO -   E 15 | d_loss=0.9250 s_loss=1.3628 alpha=0.46 tr_acc=0.507 | val_auc=0.740 val_acc=0.357 | lr=1.3e-04 14.3s
+[22:30:26] INFO -   E 20 | d_loss=0.9128 s_loss=1.2830 alpha=0.58 tr_acc=0.484 | val_auc=0.733 val_acc=0.357 | lr=5.0e-04 14.1s
+[22:31:34] INFO -   E 25 | d_loss=0.9055 s_loss=1.3407 alpha=0.68 tr_acc=0.527 | val_auc=0.660 val_acc=0.357 | lr=4.7e-04 13.6s
+[22:32:45] INFO -   E 30 | d_loss=0.9139 s_loss=1.2855 alpha=0.76 tr_acc=0.496 | val_auc=0.695 val_acc=0.357 | lr=3.8e-04 14.2s
+[22:33:12] INFO -   Early stop at epoch 32, best val AUC=0.7830
+[22:33:14] INFO -   Optimal threshold from val: 0.587 (raw=0.587, Youden's J=0.457)
+[22:33:14] INFO -   Running TTA (4 augmentations per scan)...
+[22:33:29] INFO -   TEST @opt=0.587: Acc=0.599 Sens=0.906 Spec=0.152
+[22:33:29] INFO -   TEST DS6 (TTA @0.5): AUC=0.537 Acc=0.593 Sens=1.000 Spec=0.000 F1=0.744 | TTA: 0.09s/scan
+[22:33:30] INFO - 
+============================================================
+[22:33:30] INFO - FOLD 5: Test site = DS7
+[22:33:30] INFO -   Train: 467 | Test: 354
+[22:33:30] INFO -   Train labels: {1: 256, 0: 211}
+[22:33:30] INFO -   Test  labels: {0: 275, 1: 79}
+[22:33:30] INFO -   Training sites: {0: 0, 2: 1, 3: 2, 4: 3, 6: 4} (5 sites)
+[22:33:30] INFO -   Train sub: 398 | Val sub: 69
+[22:33:30] INFO -   Mixed precision (FP16) enabled
+[22:34:03] INFO -   E  1 | d_loss=0.7412 s_loss=1.8895 alpha=0.03 tr_acc=0.500 | val_auc=0.587 val_acc=0.551 | lr=1.1e-04 33.0s
+[22:34:12] INFO -   E  2 | d_loss=0.6870 s_loss=1.7742 alpha=0.07 tr_acc=0.510 | val_auc=0.678 val_acc=0.623 | lr=2.1e-04 9.5s
+[22:34:22] INFO -   E  3 | d_loss=0.6541 s_loss=1.5471 alpha=0.10 tr_acc=0.510 | val_auc=0.697 val_acc=0.580 | lr=3.0e-04 9.9s
+[22:34:42] INFO -   E  5 | d_loss=0.6758 s_loss=1.3914 alpha=0.17 tr_acc=0.439 | val_auc=0.567 val_acc=0.536 | lr=5.0e-04 9.7s
+[22:35:30] INFO -   E 10 | d_loss=0.6275 s_loss=1.3867 alpha=0.32 tr_acc=0.543 | val_auc=0.740 val_acc=0.449 | lr=3.8e-04 9.9s
+[22:36:21] INFO -   E 15 | d_loss=0.6487 s_loss=1.3829 alpha=0.46 tr_acc=0.477 | val_auc=0.748 val_acc=0.681 | lr=1.3e-04 9.7s
+[22:37:10] INFO -   E 20 | d_loss=0.6308 s_loss=1.3429 alpha=0.58 tr_acc=0.541 | val_auc=0.747 val_acc=0.652 | lr=5.0e-04 9.5s
+[22:38:12] INFO -   E 25 | d_loss=0.6315 s_loss=1.3310 alpha=0.68 tr_acc=0.556 | val_auc=0.788 val_acc=0.696 | lr=4.7e-04 12.0s
+[22:39:06] INFO -   E 30 | d_loss=0.6005 s_loss=1.2626 alpha=0.76 tr_acc=0.594 | val_auc=0.805 val_acc=0.609 | lr=3.8e-04 10.4s
+[22:39:57] INFO -   E 35 | d_loss=0.6138 s_loss=1.2710 alpha=0.82 tr_acc=0.599 | val_auc=0.811 val_acc=0.710 | lr=2.6e-04 9.9s
+[22:40:48] INFO -   E 40 | d_loss=0.5813 s_loss=1.2192 alpha=0.87 tr_acc=0.671 | val_auc=0.815 val_acc=0.710 | lr=1.3e-04 11.2s
+[22:41:41] INFO -   E 45 | d_loss=0.5744 s_loss=1.2695 alpha=0.91 tr_acc=0.679 | val_auc=0.840 val_acc=0.768 | lr=4.3e-05 10.4s
+[22:42:35] INFO -   E 50 | d_loss=0.5716 s_loss=1.2779 alpha=0.93 tr_acc=0.709 | val_auc=0.835 val_acc=0.739 | lr=5.0e-04 10.2s
+[22:43:27] INFO -   E 55 | d_loss=0.5478 s_loss=1.2705 alpha=0.95 tr_acc=0.694 | val_auc=0.832 val_acc=0.754 | lr=4.9e-04 10.5s
+[22:44:19] INFO -   E 60 | d_loss=0.5587 s_loss=1.1673 alpha=0.96 tr_acc=0.663 | val_auc=0.829 val_acc=0.652 | lr=4.7e-04 10.3s
+[22:45:12] INFO -   E 65 | d_loss=0.5880 s_loss=1.2552 alpha=0.97 tr_acc=0.645 | val_auc=0.849 val_acc=0.667 | lr=4.3e-04 10.4s
+[22:46:06] INFO -   E 70 | d_loss=0.5547 s_loss=1.2175 alpha=0.98 tr_acc=0.668 | val_auc=0.839 val_acc=0.681 | lr=3.8e-04 10.8s
+[22:46:59] INFO -   E 75 | d_loss=0.5511 s_loss=1.1903 alpha=0.99 tr_acc=0.699 | val_auc=0.613 val_acc=0.551 | lr=3.2e-04 10.5s
+[22:47:53] INFO -   E 80 | d_loss=0.5229 s_loss=1.2479 alpha=0.99 tr_acc=0.730 | val_auc=0.735 val_acc=0.565 | lr=2.6e-04 11.2s
+[22:48:48] INFO -   E 85 | d_loss=0.5228 s_loss=1.2101 alpha=0.99 tr_acc=0.735 | val_auc=0.682 val_acc=0.551 | lr=1.9e-04 10.6s
+[22:49:41] INFO -   E 90 | d_loss=0.4889 s_loss=1.1976 alpha=1.00 tr_acc=0.765 | val_auc=0.854 val_acc=0.754 | lr=1.3e-04 10.5s
+[22:50:36] INFO -   E 95 | d_loss=0.5262 s_loss=1.2230 alpha=1.00 tr_acc=0.740 | val_auc=0.869 val_acc=0.797 | lr=8.2e-05 10.7s
+[22:51:33] INFO -   E100 | d_loss=0.5070 s_loss=1.1657 alpha=1.00 tr_acc=0.745 | val_auc=0.869 val_acc=0.783 | lr=4.3e-05 10.9s
+[22:52:27] INFO -   E105 | d_loss=0.5110 s_loss=1.2892 alpha=1.00 tr_acc=0.763 | val_auc=0.879 val_acc=0.783 | lr=1.8e-05 10.6s
+[22:53:22] INFO -   E110 | d_loss=0.5064 s_loss=1.2796 alpha=1.00 tr_acc=0.755 | val_auc=0.885 val_acc=0.783 | lr=5.0e-04 11.5s
+[22:54:22] INFO -   E115 | d_loss=0.5438 s_loss=1.2365 alpha=1.00 tr_acc=0.696 | val_auc=0.782 val_acc=0.565 | lr=5.0e-04 11.3s
+[22:55:15] INFO -   E120 | d_loss=0.4925 s_loss=1.1908 alpha=1.00 tr_acc=0.758 | val_auc=0.860 val_acc=0.710 | lr=4.9e-04 10.4s
+[22:56:07] INFO -   E125 | d_loss=0.5038 s_loss=1.2163 alpha=1.00 tr_acc=0.737 | val_auc=0.875 val_acc=0.594 | lr=4.8e-04 10.4s
+[22:56:28] INFO -   Early stop at epoch 127, best val AUC=0.8879
+[22:56:30] INFO -   Optimal threshold from val: 0.757 (raw=0.757, Youden's J=0.666)
+[22:56:30] INFO -   Running TTA (4 augmentations per scan)...
+[22:57:06] INFO -   TEST @opt=0.757: Acc=0.709 Sens=0.582 Spec=0.745
+[22:57:06] INFO -   TEST DS7 (TTA @0.5): AUC=0.745 Acc=0.565 Sens=0.835 Spec=0.487 F1=0.462 | TTA: 0.10s/scan
+[22:57:07] INFO - 
+============================================================
+[22:57:07] INFO - LOSO CROSS-VALIDATION SUMMARY
+[22:57:07] INFO - ============================================================
+[22:57:07] INFO -   accuracy    : weighted=0.558  mean=0.638+/-0.212  per-fold=['1.000', '0.688', '0.698', '0.286', '0.593', '0.565']
+[22:57:07] INFO -   auc         : weighted=0.645  mean=0.656+/-0.147  per-fold=['nan', 'nan', '0.850', '0.492', '0.537', '0.745'] (4/6 folds)
+[22:57:07] INFO -   sensitivity : weighted=0.891  mean=0.830+/-0.193  per-fold=['1.000', '0.688', '0.478', '0.980', '1.000', '0.835']
+[22:57:07] INFO -   specificity : weighted=0.262  mean=0.241+/-0.363  per-fold=['0.000', '0.000', '0.950', '0.008', '0.000', '0.487']
+[22:57:07] INFO -   f1          : weighted=0.575  mean=0.681+/-0.197  per-fold=['1.000', '0.815', '0.629', '0.439', '0.744', '0.462']
+(model_venv) PS D:\zaynu\Documents\coding\PS\2-2\schizobrain-Scan\model_build> 

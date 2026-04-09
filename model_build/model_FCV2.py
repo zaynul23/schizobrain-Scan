@@ -217,7 +217,7 @@ class SEDenseNet3D(nn.Module):
         in_channels: int = 2,
         init_features: int = 48,
         growth_rate: int = 16,
-        block_config: Tuple[int, ...] = (4, 6, 8),
+        block_config: Tuple[int, ...] = (4, 6, 6),
         compression: float = 0.5,
         dropout: float = 0.2,
         se_reduction: int = 8,
@@ -453,6 +453,13 @@ def get_train_augmentation():
         RandomBrightness3D(max_shift=0.08, p=0.3),
         RandomCutout3D(cube_size=10, p=0.5),  # NEW: 3D cutout
     ])
+
+
+def _brightness_shift(vol: np.ndarray, shift: float) -> np.ndarray:
+    """Shift brain channel (ch 0) intensity by a fixed amount. Used for TTA."""
+    out = vol.copy()
+    out[0] += shift
+    return out
 
 
 # ===========================================================================
@@ -773,8 +780,8 @@ def run_fold(fold_idx, test_site, train_entries, test_entries, args, device):
     # Model with site adversary
     model = SEDenseNet3D(
         in_channels=2, init_features=48, growth_rate=16,
-        block_config=(4, 6, 8), compression=0.5,
-        dropout=0.2, se_reduction=8, classifier_dropout=0.5,
+        block_config=(4, 6, 6), compression=0.5,
+        dropout=0.3, se_reduction=8, classifier_dropout=0.5,
         num_sites=num_train_sites,
     ).to(device)
 
@@ -847,10 +854,107 @@ def run_fold(fold_idx, test_site, train_entries, test_entries, args, device):
 
     early_stop.restore_best(model)
     model.to(device)
-    test_m = evaluate(model, test_loader, disease_criterion, device, use_amp=use_amp)
-    log.info(f"  TEST DS{test_site}: AUC={test_m['auc']:.3f} Acc={test_m['accuracy']:.3f} "
+
+    # ------------------------------------------------------------------
+    # Optimal threshold from validation set (Youden's J)
+    # Instead of fixed 0.5, find the threshold that maximizes
+    # sensitivity + specificity - 1 on the validation data.
+    # This fixes the fold 3 problem: AUC=0.896 but Acc=0.512 because
+    # the model's probability distribution was shifted below 0.5.
+    # ------------------------------------------------------------------
+    val_m = evaluate(model, val_loader, disease_criterion, device, use_amp=use_amp)
+    optimal_threshold = 0.5  # fallback
+    if len(set(val_m["labels"])) >= 2:
+        from sklearn.metrics import roc_curve as sk_roc_curve
+        fpr, tpr, thresholds = sk_roc_curve(val_m["labels"], val_m["probs"])
+        youdens_j = tpr - fpr  # sensitivity + specificity - 1
+        best_idx = np.argmax(youdens_j)
+        optimal_threshold = float(thresholds[best_idx])
+        raw_threshold = optimal_threshold
+        # Clamp to avoid degenerate edge values (0.0 or 1.0)
+        optimal_threshold = np.clip(optimal_threshold, 0.05, 0.95)
+        log.info(f"  Optimal threshold from val: {optimal_threshold:.3f} "
+                 f"(raw={raw_threshold:.3f}, Youden's J={youdens_j[best_idx]:.3f})")
+
+    # ------------------------------------------------------------------
+    # Test-Time Augmentation (TTA)
+    # Run each test scan 4 times: original, L-R flipped, brightness+0.05,
+    # brightness-0.05. Average the 4 probabilities.
+    # Reduces prediction variance on small test sets. ~4x inference time
+    # but inference is fast (~0.1s per scan, so ~17s for 43-scan test set).
+    # ------------------------------------------------------------------
+    log.info(f"  Running TTA (4 augmentations per scan)...")
+    tta_probs, tta_labels, tta_names = [], [], []
+    model.eval()
+
+    tta_start = time.time()
+    with torch.no_grad():
+        for entry in test_entries:
+            import nibabel as nib
+            bn, pp = entry["basename"], entry["pp_dir"]
+            brain = nib.load(os.path.join(pp, f"{bn}_preprocessed.nii.gz")).get_fdata(dtype=np.float32)
+            gm = nib.load(os.path.join(pp, f"{bn}_gm.nii.gz")).get_fdata(dtype=np.float32)
+            vol = np.stack([brain, gm], axis=0)
+            vol = np.nan_to_num(vol, nan=0.0, posinf=0.0, neginf=0.0)
+
+            # 4 augmented versions
+            augmented = [
+                vol,                                          # original
+                np.flip(vol, axis=-1).copy(),                 # L-R flip
+                _brightness_shift(vol, +0.05),                # brighter
+                _brightness_shift(vol, -0.05),                # darker
+            ]
+
+            scan_probs = []
+            for aug_vol in augmented:
+                t = torch.from_numpy(aug_vol).unsqueeze(0).to(device, non_blocking=True)
+                with torch.amp.autocast("cuda", enabled=use_amp):
+                    logit, _ = model(t, alpha=0.0)
+                prob = torch.sigmoid(logit).item()
+                scan_probs.append(prob)
+
+            avg_prob = np.mean(scan_probs)
+            tta_probs.append(avg_prob)
+            tta_labels.append(entry["label"])
+            tta_names.append(bn)
+
+    tta_elapsed = time.time() - tta_start
+    tta_per_scan = tta_elapsed / max(len(test_entries), 1)
+
+    tta_probs = np.array(tta_probs)
+    tta_labels = np.array(tta_labels)
+
+    # Apply optimal threshold instead of fixed 0.5
+    tta_preds = (tta_probs > optimal_threshold).astype(float)
+    tta_preds_05 = (tta_probs > 0.5).astype(float)  # for comparison
+
+    try: tta_auc = roc_auc_score(tta_labels, tta_probs)
+    except ValueError: tta_auc = 0.0
+
+    # Report both thresholds so you can see the difference
+    if len(set(tta_labels)) >= 2:
+        acc_05 = accuracy_score(tta_labels, tta_preds_05)
+        sens_05 = recall_score(tta_labels, tta_preds_05, pos_label=1, zero_division=0)
+        spec_05 = recall_score(tta_labels, tta_preds_05, pos_label=0, zero_division=0)
+        log.info(f"  TEST @0.5:   Acc={acc_05:.3f} Sens={sens_05:.3f} Spec={spec_05:.3f}")
+
+    test_m = {
+        "loss": 0.0,  # not meaningful with TTA
+        "accuracy": accuracy_score(tta_labels, tta_preds),
+        "auc": tta_auc,
+        "sensitivity": recall_score(tta_labels, tta_preds, pos_label=1, zero_division=0),
+        "specificity": recall_score(tta_labels, tta_preds, pos_label=0, zero_division=0),
+        "f1": f1_score(tta_labels, tta_preds, zero_division=0),
+        "probs": tta_probs,
+        "labels": tta_labels,
+        "basenames": tta_names,
+        "threshold": optimal_threshold,
+    }
+
+    log.info(f"  TEST DS{test_site} (TTA + optimal threshold={optimal_threshold:.3f}): "
+             f"AUC={test_m['auc']:.3f} Acc={test_m['accuracy']:.3f} "
              f"Sens={test_m['sensitivity']:.3f} Spec={test_m['specificity']:.3f} "
-             f"F1={test_m['f1']:.3f}")
+             f"F1={test_m['f1']:.3f} | TTA: {tta_per_scan:.2f}s/scan")
 
     save_dir = Path(args.output_dir) / f"fold_{fold_idx}_DS{test_site}"
     save_dir.mkdir(parents=True, exist_ok=True)
@@ -918,12 +1022,12 @@ def main():
     p.add_argument("--epochs", type=int, default=150)
     p.add_argument("--batch-size", type=int, default=4)
     p.add_argument("--lr", type=float, default=5e-4)
-    p.add_argument("--weight-decay", type=float, default=1e-4)
-    p.add_argument("--patience", type=int, default=20)
+    p.add_argument("--weight-decay", type=float, default=5e-4)
+    p.add_argument("--patience", type=int, default=25)
     p.add_argument("--workers", type=int, default=4)
     p.add_argument("--device", default="auto")
     p.add_argument("--fold", type=int, default=None)
-    p.add_argument("--adv-lambda", type=float, default=0.1,
+    p.add_argument("--adv-lambda", type=float, default=0.15,
                    help="Weight for site adversarial loss. 0.1 is conservative. "
                         "Higher = stronger site suppression but may hurt disease accuracy.")
     p.add_argument("--gradcam", action="store_true")
@@ -986,10 +1090,22 @@ def main():
         for name in ["accuracy", "auc", "sensitivity", "specificity", "f1"]:
             vals = [m[name] for m in all_metrics]
             w = [m["n_test"] for m in all_metrics]
-            wavg = sum(v * wi for v, wi in zip(vals, w)) / total_n
+
+            # Filter out NaN values (single-class folds for AUC)
+            valid = [(v, wi) for v, wi in zip(vals, w) if not (isinstance(v, float) and np.isnan(v))]
+            if valid:
+                valid_vals, valid_w = zip(*valid)
+                wavg = sum(v * wi for v, wi in zip(valid_vals, valid_w)) / sum(valid_w)
+                mean_v = np.mean(valid_vals)
+                std_v = np.std(valid_vals)
+            else:
+                wavg = mean_v = std_v = float("nan")
+
+            n_valid = len(valid)
+            suffix = f" ({n_valid}/{len(vals)} folds)" if n_valid < len(vals) else ""
             log.info(f"  {name:12s}: weighted={wavg:.3f}  "
-                     f"mean={np.mean(vals):.3f}+/-{np.std(vals):.3f}  "
-                     f"per-fold={[f'{v:.3f}' for v in vals]}")
+                     f"mean={mean_v:.3f}+/-{std_v:.3f}  "
+                     f"per-fold={[f'{v:.3f}' for v in vals]}{suffix}")
 
         with open(Path(args.output_dir) / "loso_summary.json", "w") as f:
             json.dump(all_metrics, f, indent=2)

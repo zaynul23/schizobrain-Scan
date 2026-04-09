@@ -177,7 +177,10 @@ class SiteAdversary(nn.Module):
     def __init__(self, in_features: int, num_sites: int):
         super().__init__()
         self.head = nn.Sequential(
-            nn.Linear(in_features, 64),
+            nn.Linear(in_features, 128),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.3),
+            nn.Linear(128, 64),
             nn.ReLU(inplace=True),
             nn.Dropout(0.3),
             nn.Linear(64, num_sites),
@@ -189,13 +192,10 @@ class SiteAdversary(nn.Module):
 
     @staticmethod
     def get_alpha(epoch: int, max_epochs: int) -> float:
-        """
-        Sigmoid ramp schedule for alpha.
-        Starts near 0, reaches ~1 by 2/3 through training.
-        Smoother than linear ramp — avoids sudden gradient reversal shock.
-        """
-        p = epoch / max_epochs
-        return float(2.0 / (1.0 + math.exp(-10.0 * p)) - 1.0)
+        if epoch < 10:
+            return 0.0
+        progress = min((epoch - 10) / 30, 1.0)
+        return progress
 
 
 # ===========================================================================
@@ -217,7 +217,7 @@ class SEDenseNet3D(nn.Module):
         in_channels: int = 2,
         init_features: int = 48,
         growth_rate: int = 16,
-        block_config: Tuple[int, ...] = (4, 6, 8),
+        block_config: Tuple[int, ...] = (4, 6, 6),
         compression: float = 0.5,
         dropout: float = 0.2,
         se_reduction: int = 8,
@@ -375,18 +375,20 @@ class RandomFlip3D:
         return x
 
 class RandomNoise3D:
-    """Gaussian noise on brain channel only (ch 0)."""
-    def __init__(self, std_range=(0.0, 0.03), p=0.4):
-        self.std_range, self.p = std_range, p
+    """Gaussian noise on BOTH channels. Brain channel gets more noise than GM."""
+    def __init__(self, brain_std=(0.0, 0.05), gm_std=(0.0, 0.02), p=0.5):
+        self.brain_std, self.gm_std, self.p = brain_std, gm_std, p
     def __call__(self, x):
         if np.random.rand() < self.p:
             x = x.copy()
-            x[0] += np.random.randn(*x[0].shape).astype(np.float32) * np.random.uniform(*self.std_range)
+            x[0] += np.random.randn(*x[0].shape).astype(np.float32) * np.random.uniform(*self.brain_std)
+            x[1] += np.random.randn(*x[1].shape).astype(np.float32) * np.random.uniform(*self.gm_std)
+            x[1] = np.clip(x[1], 0.0, 1.0)  # GM stays in [0,1]
         return x
 
 class RandomIntensityScale:
-    """Gain variation on brain channel."""
-    def __init__(self, scale_range=(0.92, 1.08), p=0.3):
+    """Gain variation on brain channel. Wider range to simulate cross-site scanner differences."""
+    def __init__(self, scale_range=(0.88, 1.12), p=0.4):
         self.scale_range, self.p = scale_range, p
     def __call__(self, x):
         if np.random.rand() < self.p:
@@ -396,7 +398,7 @@ class RandomIntensityScale:
 
 class RandomBrightness3D:
     """Additive shift on brain channel."""
-    def __init__(self, max_shift=0.08, p=0.3):
+    def __init__(self, max_shift=0.1, p=0.3):
         self.max_shift, self.p = max_shift, p
     def __call__(self, x):
         if np.random.rand() < self.p:
@@ -406,37 +408,41 @@ class RandomBrightness3D:
 
 class RandomCutout3D:
     """
-    Zero out a random contiguous cube from BOTH channels.
-
-    Size 10x10x10 at 2mm resolution = 20x20x20mm cube.
-    This is large enough to occlude a subcortical nucleus but small
-    enough to leave most of the brain visible.
-
-    Effect: forces the model to distribute its decision-making across
-    multiple brain regions. Without cutout, the model can concentrate
-    100% of its attention on one spot (e.g. left hippocampus). With
-    cutout, that spot is sometimes blacked out during training, so the
-    model must also learn from thalamus, ventricles, caudate, etc.
-
-    Also simulates real signal dropout near air-tissue boundaries
-    (sinuses, temporal poles, ear canals) — a realistic artifact.
+    Zero out random contiguous cubes from BOTH channels.
+    Applies num_cubes independent cutouts per call.
+    Two cubes forces the model to handle multiple missing regions
+    simultaneously — closer to real multi-region signal dropout.
     """
-    def __init__(self, cube_size: int = 10, p: float = 0.5):
+    def __init__(self, cube_size: int = 10, num_cubes: int = 2, p: float = 0.5):
         self.cube_size = cube_size
+        self.num_cubes = num_cubes
         self.p = p
 
     def __call__(self, x):
-        # x shape: (2, D, H, W) = (2, 91, 109, 91)
         if np.random.rand() < self.p:
             x = x.copy()
             _, d, h, w = x.shape
             s = self.cube_size
-            # Random position (clamped so cube fits within volume)
-            cd = np.random.randint(0, max(d - s, 1))
-            ch = np.random.randint(0, max(h - s, 1))
-            cw = np.random.randint(0, max(w - s, 1))
-            # Zero both channels — brain volume AND GM map
-            x[:, cd:cd+s, ch:ch+s, cw:cw+s] = 0.0
+            for _ in range(self.num_cubes):
+                cd = np.random.randint(0, max(d - s, 1))
+                ch = np.random.randint(0, max(h - s, 1))
+                cw = np.random.randint(0, max(w - s, 1))
+                x[:, cd:cd+s, ch:ch+s, cw:cw+s] = 0.0
+        return x
+
+class RandomGMDropout:
+    """
+    Randomly zero the GM channel entirely. Forces the model to also learn
+    from the brain volume channel alone, not rely exclusively on GM.
+    Low probability — GM is the stronger signal, but the model shouldn't
+    be brittle if GM quality varies across sites.
+    """
+    def __init__(self, p=0.1):
+        self.p = p
+    def __call__(self, x):
+        if np.random.rand() < self.p:
+            x = x.copy()
+            x[1] = 0.0
         return x
 
 class Compose3D:
@@ -446,13 +452,34 @@ class Compose3D:
         return x
 
 def get_train_augmentation():
+    """
+    Sequential augmentation pipeline — matches Zhang et al. approach.
+    Each transform fires independently with its own probability.
+    A single scan can receive all augmentations at once.
+
+    Augmentations tuned for MNI-registered multi-site data:
+    - No spatial warps (would break FNIRT registration)
+    - Intensity augmentations simulate cross-site scanner variation
+    - Noise on BOTH channels (brain + GM) because FAST segmentation
+      quality varies by site
+    - Double cutout forces distributed spatial attention
+    - GM dropout prevents over-reliance on a single channel
+    """
     return Compose3D([
         RandomFlip3D(p=0.5),
-        RandomNoise3D(std_range=(0.0, 0.03), p=0.4),
-        RandomIntensityScale(scale_range=(0.92, 1.08), p=0.3),
-        RandomBrightness3D(max_shift=0.08, p=0.3),
-        RandomCutout3D(cube_size=10, p=0.5),  # NEW: 3D cutout
+        RandomNoise3D(brain_std=(0.0, 0.05), gm_std=(0.0, 0.02), p=0.5),
+        RandomIntensityScale(scale_range=(0.88, 1.12), p=0.4),
+        RandomBrightness3D(max_shift=0.1, p=0.3),
+        RandomCutout3D(cube_size=10, num_cubes=2, p=0.5),
+        RandomGMDropout(p=0.1),
     ])
+
+
+def _brightness_shift(vol: np.ndarray, shift: float) -> np.ndarray:
+    """Shift brain channel (ch 0) intensity by a fixed amount. Used for TTA."""
+    out = vol.copy()
+    out[0] += shift
+    return out
 
 
 # ===========================================================================
@@ -525,7 +552,7 @@ def build_entries_from_csv(csv_path: str) -> List[Dict]:
             nifti_dir = os.path.dirname(native_path)       # .../scans/NIFTI
             scans_dir = os.path.dirname(nifti_dir)          # .../scans
             dataset_dir = os.path.dirname(scans_dir)        # .../open_neuro_3_58
-            pp_dir = os.path.join(dataset_dir, "preprocessed", f"PP_{basename}")
+            pp_dir = os.path.join(dataset_dir, "preprocessed3", f"PP_{basename}")
 
             if not os.path.exists(os.path.join(pp_dir, f"{basename}_preprocessed.nii.gz")):
                 skipped += 1
@@ -622,17 +649,18 @@ def get_warmup_cosine_scheduler(optimizer, warmup_epochs, total_epochs, min_lr_r
 
 def train_one_epoch(model, loader, disease_criterion, site_criterion,
                     optimizer, device, epoch, max_epochs, site_map,
-                    adversarial_lambda=0.1, scaler=None):
+                    adversarial_lambda=0.1, scaler=None, label_smoothing=0.05):
     """
     Train one epoch with disease classification + site adversarial loss.
     Supports mixed precision (FP16) via torch.amp when scaler is provided.
 
-    Total loss = disease_loss + adversarial_lambda * site_loss
+    Label smoothing: targets become 0.05/0.95 instead of 0/1. Prevents the
+    model from driving training loss to near-zero by becoming overconfident.
+    This directly attacks the overfitting pattern where tr_acc hits 0.90+
+    while val_auc stalls — the model can't memorize as hard because the
+    targets themselves have uncertainty.
 
-    The site_loss gradients get REVERSED before reaching the feature
-    extractor (via GradientReversalFn), so minimizing site_loss in the
-    adversary head simultaneously makes the feature extractor WORSE
-    at predicting site — i.e. more site-invariant.
+    Total loss = disease_loss + adversarial_lambda * site_loss
     """
     model.train()
     total_loss, total_disease_loss, total_site_loss = 0.0, 0.0, 0.0
@@ -644,6 +672,10 @@ def train_one_epoch(model, loader, disease_criterion, site_criterion,
     for volumes, labels, dscodes, _ in loader:
         volumes = volumes.to(device, non_blocking=True)
         labels = labels.to(device, non_blocking=True)
+
+        # Label smoothing: 0 -> smoothing, 1 -> 1-smoothing
+        # Prevents overconfident predictions that drive train loss to 0
+        smooth_labels = labels * (1.0 - 2 * label_smoothing) + label_smoothing
 
         # Map dscodes to contiguous site indices
         site_targets = torch.tensor(
@@ -660,7 +692,7 @@ def train_one_epoch(model, loader, disease_criterion, site_criterion,
             disease_logits, site_logits = model(volumes, alpha=alpha)
             disease_logits = disease_logits.squeeze(1)
 
-            d_loss = disease_criterion(disease_logits, labels)
+            d_loss = disease_criterion(disease_logits, smooth_labels)
 
             if site_logits is not None:
                 s_loss = site_criterion(site_logits, site_targets)
@@ -684,6 +716,7 @@ def train_one_epoch(model, loader, disease_criterion, site_criterion,
 
         total_loss += loss.item() * volumes.size(0)
         total_disease_loss += d_loss.item() * volumes.size(0)
+        # Accuracy computed against ORIGINAL hard labels, not smoothed
         correct += ((torch.sigmoid(disease_logits) > 0.5).float() == labels).sum().item()
         total += labels.size(0)
 
@@ -773,8 +806,8 @@ def run_fold(fold_idx, test_site, train_entries, test_entries, args, device):
     # Model with site adversary
     model = SEDenseNet3D(
         in_channels=2, init_features=48, growth_rate=16,
-        block_config=(4, 6, 8), compression=0.5,
-        dropout=0.2, se_reduction=8, classifier_dropout=0.5,
+        block_config=(4, 6, 6), compression=0.5,
+        dropout=0.3, se_reduction=8, classifier_dropout=0.5,
         num_sites=num_train_sites,
     ).to(device)
 
@@ -847,10 +880,110 @@ def run_fold(fold_idx, test_site, train_entries, test_entries, args, device):
 
     early_stop.restore_best(model)
     model.to(device)
-    test_m = evaluate(model, test_loader, disease_criterion, device, use_amp=use_amp)
-    log.info(f"  TEST DS{test_site}: AUC={test_m['auc']:.3f} Acc={test_m['accuracy']:.3f} "
+
+    # ------------------------------------------------------------------
+    # Optimal threshold from validation set (Youden's J)
+    # Instead of fixed 0.5, find the threshold that maximizes
+    # sensitivity + specificity - 1 on the validation data.
+    # This fixes the fold 3 problem: AUC=0.896 but Acc=0.512 because
+    # the model's probability distribution was shifted below 0.5.
+    # ------------------------------------------------------------------
+    val_m = evaluate(model, val_loader, disease_criterion, device, use_amp=use_amp)
+    optimal_threshold = 0.5  # fallback
+    if len(set(val_m["labels"])) >= 2:
+        from sklearn.metrics import roc_curve as sk_roc_curve
+        fpr, tpr, thresholds = sk_roc_curve(val_m["labels"], val_m["probs"])
+        youdens_j = tpr - fpr  # sensitivity + specificity - 1
+        best_idx = np.argmax(youdens_j)
+        optimal_threshold = float(thresholds[best_idx])
+        raw_threshold = optimal_threshold
+        # Clamp to avoid degenerate edge values (0.0 or 1.0)
+        optimal_threshold = np.clip(optimal_threshold, 0.05, 0.95)
+        log.info(f"  Optimal threshold from val: {optimal_threshold:.3f} "
+                 f"(raw={raw_threshold:.3f}, Youden's J={youdens_j[best_idx]:.3f})")
+
+    # ------------------------------------------------------------------
+    # Test-Time Augmentation (TTA)
+    # Run each test scan 4 times: original, L-R flipped, brightness+0.05,
+    # brightness-0.05. Average the 4 probabilities.
+    # Reduces prediction variance on small test sets. ~4x inference time
+    # but inference is fast (~0.1s per scan, so ~17s for 43-scan test set).
+    # ------------------------------------------------------------------
+    log.info(f"  Running TTA (4 augmentations per scan)...")
+    tta_probs, tta_labels, tta_names = [], [], []
+    model.eval()
+
+    tta_start = time.time()
+    with torch.no_grad():
+        for entry in test_entries:
+            import nibabel as nib
+            bn, pp = entry["basename"], entry["pp_dir"]
+            brain = nib.load(os.path.join(pp, f"{bn}_preprocessed.nii.gz")).get_fdata(dtype=np.float32)
+            gm = nib.load(os.path.join(pp, f"{bn}_gm.nii.gz")).get_fdata(dtype=np.float32)
+            vol = np.stack([brain, gm], axis=0)
+            vol = np.nan_to_num(vol, nan=0.0, posinf=0.0, neginf=0.0)
+
+            # 4 augmented versions
+            augmented = [
+                vol,                                          # original
+                np.flip(vol, axis=-1).copy(),                 # L-R flip
+                _brightness_shift(vol, +0.05),                # brighter
+                _brightness_shift(vol, -0.05),                # darker
+            ]
+
+            scan_probs = []
+            for aug_vol in augmented:
+                t = torch.from_numpy(aug_vol).unsqueeze(0).to(device, non_blocking=True)
+                with torch.amp.autocast("cuda", enabled=use_amp):
+                    logit, _ = model(t, alpha=0.0)
+                prob = torch.sigmoid(logit).item()
+                scan_probs.append(prob)
+
+            avg_prob = np.mean(scan_probs)
+            tta_probs.append(avg_prob)
+            tta_labels.append(entry["label"])
+            tta_names.append(bn)
+
+    tta_elapsed = time.time() - tta_start
+    tta_per_scan = tta_elapsed / max(len(test_entries), 1)
+
+    tta_probs = np.array(tta_probs)
+    tta_labels = np.array(tta_labels)
+
+    # Apply FIXED 0.5 threshold as primary (stable across folds)
+    # Optimal threshold from small val sets is too unstable — report as info only
+    tta_preds_05 = (tta_probs > 0.5).astype(float)
+    tta_preds_opt = (tta_probs > optimal_threshold).astype(float)
+
+    try: tta_auc = roc_auc_score(tta_labels, tta_probs)
+    except ValueError: tta_auc = 0.0
+
+    # Report both for comparison
+    if len(set(tta_labels)) >= 2:
+        acc_opt = accuracy_score(tta_labels, tta_preds_opt)
+        sens_opt = recall_score(tta_labels, tta_preds_opt, pos_label=1, zero_division=0)
+        spec_opt = recall_score(tta_labels, tta_preds_opt, pos_label=0, zero_division=0)
+        log.info(f"  TEST @opt={optimal_threshold:.3f}: Acc={acc_opt:.3f} Sens={sens_opt:.3f} Spec={spec_opt:.3f}")
+
+    # Primary metrics use threshold=0.5 (threshold-independent AUC is the real metric)
+    test_m = {
+        "loss": 0.0,
+        "accuracy": accuracy_score(tta_labels, tta_preds_05),
+        "auc": tta_auc,
+        "sensitivity": recall_score(tta_labels, tta_preds_05, pos_label=1, zero_division=0),
+        "specificity": recall_score(tta_labels, tta_preds_05, pos_label=0, zero_division=0),
+        "f1": f1_score(tta_labels, tta_preds_05, zero_division=0),
+        "probs": tta_probs,
+        "labels": tta_labels,
+        "basenames": tta_names,
+        "threshold": 0.5,
+        "optimal_threshold": optimal_threshold,
+    }
+
+    log.info(f"  TEST DS{test_site} (TTA @0.5): "
+             f"AUC={test_m['auc']:.3f} Acc={test_m['accuracy']:.3f} "
              f"Sens={test_m['sensitivity']:.3f} Spec={test_m['specificity']:.3f} "
-             f"F1={test_m['f1']:.3f}")
+             f"F1={test_m['f1']:.3f} | TTA: {tta_per_scan:.2f}s/scan")
 
     save_dir = Path(args.output_dir) / f"fold_{fold_idx}_DS{test_site}"
     save_dir.mkdir(parents=True, exist_ok=True)
@@ -918,12 +1051,12 @@ def main():
     p.add_argument("--epochs", type=int, default=150)
     p.add_argument("--batch-size", type=int, default=4)
     p.add_argument("--lr", type=float, default=5e-4)
-    p.add_argument("--weight-decay", type=float, default=1e-4)
-    p.add_argument("--patience", type=int, default=20)
+    p.add_argument("--weight-decay", type=float, default=5e-4)
+    p.add_argument("--patience", type=int, default=25)
     p.add_argument("--workers", type=int, default=4)
     p.add_argument("--device", default="auto")
     p.add_argument("--fold", type=int, default=None)
-    p.add_argument("--adv-lambda", type=float, default=0.1,
+    p.add_argument("--adv-lambda", type=float, default=0.4,
                    help="Weight for site adversarial loss. 0.1 is conservative. "
                         "Higher = stronger site suppression but may hurt disease accuracy.")
     p.add_argument("--gradcam", action="store_true")
@@ -986,10 +1119,22 @@ def main():
         for name in ["accuracy", "auc", "sensitivity", "specificity", "f1"]:
             vals = [m[name] for m in all_metrics]
             w = [m["n_test"] for m in all_metrics]
-            wavg = sum(v * wi for v, wi in zip(vals, w)) / total_n
+
+            # Filter out NaN values (single-class folds for AUC)
+            valid = [(v, wi) for v, wi in zip(vals, w) if not (isinstance(v, float) and np.isnan(v))]
+            if valid:
+                valid_vals, valid_w = zip(*valid)
+                wavg = sum(v * wi for v, wi in zip(valid_vals, valid_w)) / sum(valid_w)
+                mean_v = np.mean(valid_vals)
+                std_v = np.std(valid_vals)
+            else:
+                wavg = mean_v = std_v = float("nan")
+
+            n_valid = len(valid)
+            suffix = f" ({n_valid}/{len(vals)} folds)" if n_valid < len(vals) else ""
             log.info(f"  {name:12s}: weighted={wavg:.3f}  "
-                     f"mean={np.mean(vals):.3f}+/-{np.std(vals):.3f}  "
-                     f"per-fold={[f'{v:.3f}' for v in vals]}")
+                     f"mean={mean_v:.3f}+/-{std_v:.3f}  "
+                     f"per-fold={[f'{v:.3f}' for v in vals]}{suffix}")
 
         with open(Path(args.output_dir) / "loso_summary.json", "w") as f:
             json.dump(all_metrics, f, indent=2)
